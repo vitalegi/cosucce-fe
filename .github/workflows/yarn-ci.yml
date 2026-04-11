@@ -5,6 +5,9 @@ defaults:
   run:
     working-directory: ./
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
