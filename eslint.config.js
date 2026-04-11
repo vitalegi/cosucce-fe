@@ -27,7 +27,7 @@ export default defineConfigWithVueTs(
    */
   ...pluginVue.configs['flat/essential'],
 
-  ...vueTsConfigs.recommended,
+  vueTsConfigs.recommended,
 
   {
     files: ['**/*.ts', '**/*.vue'],
