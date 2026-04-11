@@ -38,7 +38,7 @@
     "workbox-routing": "^7.4.0",
     "workbox-strategies": "^7.0.0",
     "@eslint/js": "^9.39.4",
-    "eslint": "^9.39.4",
+    "eslint": "^10.2.0",
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.4.0",
     "vue-tsc": "^3.2.6",
