@@ -29,7 +29,7 @@ export default class BoardCategory {
 
   public static hash(e: BoardCategory): string {
     const str = JSON.stringify(
-      [e.categoryId, e.boardId, e.etag, e.label, e.icon, e.enabled].filter((e) => !!e),
+      [e.categoryId, e.boardId, e.label, e.icon, e.enabled].filter((e) => !!e),
     );
     return MD5(str).toString();
   }

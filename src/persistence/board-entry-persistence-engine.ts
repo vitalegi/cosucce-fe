@@ -88,7 +88,7 @@ export class UpdateBoardEntryPersistence
   async executeRemote(changelog: Changelog, allowSSORedirect: boolean): Promise<AxiosResponse> {
     const entity = changelog.payload;
     return await this._axios.put(
-      `/budget/board/${entity.boardId}/entry/${entity.entryId}`,
+      `/budget/board/${entity.boardId}/entry`,
       {
         entryId: entity.entryId,
         date: entity.date,
@@ -96,10 +96,13 @@ export class UpdateBoardEntryPersistence
         categoryId: entity.categoryId,
         description: entity.description,
         amount: entity.amount,
-        etag: changelog.oldETag,
-        newETag: changelog.newETag,
+        etag: changelog.newETag,
       },
-      {},
+      {
+        headers: {
+          'x-etag': changelog.oldETag,
+        },
+      },
       allowSSORedirect,
     );
   }
