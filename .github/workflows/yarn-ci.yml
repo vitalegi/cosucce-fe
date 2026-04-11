@@ -11,19 +11,19 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [24.x]
     defaults:
       run:
         working-directory: ./
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-          cache-dependency-path: ./
+          cache-dependency-path: ./yarn.lock
       - run: yarn install --frozen-lockfile
       - run: yarn lint
       - run: yarn build
