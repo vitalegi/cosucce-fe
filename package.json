@@ -17,7 +17,7 @@
   "dependencies": {
     "@quasar/extras": "^1.16.4",
     "@types/crypto-js": "^4.2.2",
-    "axios": "^1.11.0",
+    "axios": "^1.15.0",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "dexie": "^4.0.11",
