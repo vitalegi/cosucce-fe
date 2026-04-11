@@ -5,6 +5,7 @@ import { OidcAuth } from 'src/auth/auth';
 import Base64Utils from 'src/utils/base64';
 import axios from 'axios';
 import { AxiosWrapperAuth, AxiosWrapperPublic } from './authenticated-axios';
+import { useUserStore } from 'src/stores/user-store';
 
 function oidcUrl() {
   if (process.env.OIDC_URL !== undefined) {
@@ -54,10 +55,15 @@ export class AuthService {
 
   async tokenRefresh(): Promise<OidcAuth> {
     console.log('token refresh start');
-    const newAuth = await this._oidcService.oidcRefresh();
-    console.log('token refresh done');
-    this.setAuthenticated(newAuth);
-    return newAuth;
+    try {
+      const newAuth = await this._oidcService.oidcRefresh();
+      console.log('token refresh done');
+      this.setAuthenticated(newAuth);
+      return newAuth;
+    } catch (e) {
+      this.clearAuthentication();
+      throw e;
+    }
   }
 
   async logout(): Promise<void> {
@@ -65,13 +71,13 @@ export class AuthService {
     this.clearAuthentication();
   }
   public setAuthenticated(auth: OidcAuth): void {
-    window.localStorage.setItem('oidc_access_token', auth.accessToken);
-    window.localStorage.setItem('oidc_id_token', auth.idToken);
+    const userStore = useUserStore();
+    userStore.updateTokens(auth.idToken, auth.accessToken);
   }
 
   public clearAuthentication(): void {
-    window.localStorage.removeItem('oidc_access_token');
-    window.localStorage.removeItem('oidc_id_token');
+    const userStore = useUserStore();
+    userStore.removeTokens();
   }
 
   public getIdToken(): string | null {
@@ -115,9 +121,10 @@ function buildAxiosPublicApi(): AxiosWrapperPublic {
 function buildAxiosProtectedApi(authService: AuthService): AxiosWrapperAuth {
   const api = axios.create({ baseURL: '/api' });
   api.interceptors.request.use((config) => {
-    const idToken = authService.getIdToken();
+    const userStore = useUserStore();
+    const idToken = userStore.idToken;
     if (idToken && idToken !== '') {
-      config.headers.Authorization = 'Bearer ' + authService.getIdToken();
+      config.headers.Authorization = 'Bearer ' + userStore.idToken;
     }
     return config;
   });

@@ -14,6 +14,7 @@
           @click="toggleRightDrawer"
           v-if="mainLayoutStore.showRightMenu"
         />
+        <UserStatus />
       </q-toolbar>
     </q-header>
 
@@ -57,6 +58,7 @@ import { authService } from 'src/services/backend-service';
 import { useMainLayoutStore } from 'src/stores/main-layout-store';
 import routing from 'src/router/routing';
 import { useRouter } from 'vue-router';
+import UserStatus from 'src/auth/UserStatus.vue';
 
 const mainLayoutStore = useMainLayoutStore();
 

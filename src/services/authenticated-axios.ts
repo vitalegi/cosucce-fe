@@ -112,14 +112,13 @@ export class AxiosWrapperAuth implements AxiosWrapper {
         console.log('refresh token');
         const auth = await this.oidcService.oidcRefresh();
         this.authService.setAuthenticated(auth);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e2) {
         if (allowSSORedirect) {
           const back = window.location.pathname + window.location.search;
           this.authService.login(`${process.env.SELF_URL}/oidc/login`, back);
-          throw Error('No session available, do SSO');
+          throw Error('No session available, do SSO', { cause: e2 });
         } else {
-          throw Error('No session available, SSO not allowed');
+          throw Error('No session available, SSO not allowed', { cause: e2 });
         }
       }
       console.log('do call #2');
