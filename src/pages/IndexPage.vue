@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="row items-start justify-evenly q-pa-md">
     <q-card class="my-card" @click="routing.budget().viewBoards($router)">
       <img src="~assets/budget.jpg" />
       <q-card-section>

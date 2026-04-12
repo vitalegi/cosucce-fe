@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="row items-start justify-evenly q-pa-md">
     <BoardEditor name="" @save="save"></BoardEditor>
   </q-page>
 </template>

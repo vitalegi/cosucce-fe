@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="row items-start justify-evenly q-pa-md">
     <BoardAccountEditor
       :boardId="boardId"
       :id="accountId"
