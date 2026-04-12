@@ -1,5 +1,6 @@
 <template>
   <q-page class="row items-start justify-evenly q-pa-md">
+    <CommonBreadcrumbs />
     <BoardAccountEditor
       :boardId="boardId"
       :id="accountId"
@@ -20,6 +21,7 @@ import BoardAccountEditor from 'src/budget/components/accounts/BoardAccountEdito
 import routing from 'src/router/routing';
 import BoardAccount from '../models/board-account';
 import localDb from 'src/persistence/local-db';
+import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 
 const route = useRoute();
 const router = useRouter();

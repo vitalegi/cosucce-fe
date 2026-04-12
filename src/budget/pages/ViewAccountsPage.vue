@@ -1,5 +1,6 @@
 <template>
   <q-page class="row items-start justify-evenly q-pa-md">
+    <CommonBreadcrumbs />
     <BoardAccountsTable :boardId="boardId" @add="addAccount" />
   </q-page>
 </template>
@@ -10,6 +11,7 @@ import BoardAccountsTable from 'src/budget/components/accounts/BoardAccountsTabl
 import { ref, watch } from 'vue';
 import { toBoardId } from '../util/budget-route-params-util';
 import routing from 'src/router/routing';
+import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 
 const route = useRoute();
 const router = useRouter();

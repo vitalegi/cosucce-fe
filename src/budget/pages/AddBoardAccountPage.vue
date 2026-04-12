@@ -1,12 +1,15 @@
 <template>
-  <q-page class="row items-start justify-evenly q-pa-md">
-    <BoardAccountEditor
-      :boardId="boardId"
-      label=""
-      :icon="IconUtil.randomIcon().icon"
-      :enabled="true"
-      @save="save"
-    ></BoardAccountEditor>
+  <q-page class="row content-start justify-evenly">
+    <CommonBreadcrumbs />
+    <div class="row col-12 justify-center q-mb-sm">
+      <BoardAccountEditor
+        :boardId="boardId"
+        label=""
+        :icon="IconUtil.randomIcon().icon"
+        :enabled="true"
+        @save="save"
+      />
+    </div>
   </q-page>
 </template>
 
@@ -18,6 +21,7 @@ import { toBoardId } from 'src/budget/util/budget-route-params-util';
 import BoardAccountEditor from 'src/budget/components/accounts/BoardAccountEditor.vue';
 import routing from 'src/router/routing';
 import IconUtil from 'src/budget/util/icon-util';
+import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 
 const route = useRoute();
 const router = useRouter();

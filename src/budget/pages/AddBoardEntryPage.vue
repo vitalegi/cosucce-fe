@@ -1,5 +1,6 @@
 <template>
   <q-page class="row items-start justify-evenly q-pa-md">
+    <CommonBreadcrumbs />
     <BoardEntryEditor
       :boardId="boardId"
       date=""
@@ -19,6 +20,7 @@ import budgetSyncService from 'src/budget/services/budget-sync';
 import { useRoute, useRouter } from 'vue-router';
 import { toBoardId } from 'src/budget/util/budget-route-params-util';
 import routing from 'src/router/routing';
+import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 
 const route = useRoute();
 const router = useRouter();

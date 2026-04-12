@@ -1,5 +1,6 @@
 <template>
   <q-page class="row items-start justify-evenly q-pa-md">
+    <common-breadcrumbs />
     <q-card class="my-card" @click="routing.budget().viewBoards($router)">
       <img src="~assets/budget.jpg" />
       <q-card-section>
@@ -11,6 +12,7 @@
 </template>
 
 <script setup lang="ts">
+import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 import routing from 'src/router/routing';
 </script>
 <style lang="sass" scoped>
