@@ -36,4 +36,17 @@ export class BudgetBreadcrumbs {
       to: link ? BudgetPaths.settingsViewCategories(boardId) : undefined,
     };
   }
+  public static settingsAddCategory(boardId: string, link: boolean = true): Breadcrumb {
+    return { label: 'Add', to: link ? BudgetPaths.settingsAddCategory(boardId) : undefined };
+  }
+  public static settingsEditCategory(
+    boardId: string,
+    categoryId: string,
+    link: boolean = true,
+  ): Breadcrumb {
+    return {
+      label: 'Edit',
+      to: link ? BudgetPaths.settingsEditCategory(boardId, categoryId) : undefined,
+    };
+  }
 }

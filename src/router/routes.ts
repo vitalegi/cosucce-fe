@@ -136,6 +136,40 @@ const routes: RouteRecordRaw[] = [
               },
             },
           },
+
+          {
+            path: 'add-category',
+            component: () => import('/src/budget/pages/AddBoardCategoryPage.vue'),
+            meta: {
+              breadcrumbs: (route: RouteLocationNormalized) => {
+                const boardId = castParamToString(route.params.boardId);
+                return [
+                  home(),
+                  BudgetBreadcrumbs.viewBoards(),
+                  BudgetBreadcrumbs.viewBoard(boardId),
+                  BudgetBreadcrumbs.settingsViewCategories(boardId),
+                  BudgetBreadcrumbs.settingsAddCategory(boardId, false),
+                ];
+              },
+            },
+          },
+          {
+            path: 'category/:categoryId',
+            component: () => import('/src/budget/pages/UpdateBoardCategoryPage.vue'),
+            meta: {
+              breadcrumbs: (route: RouteLocationNormalized) => {
+                const boardId = castParamToString(route.params.boardId);
+                const categoryId = castParamToString(route.params.categoryId);
+                return [
+                  home(),
+                  BudgetBreadcrumbs.viewBoards(),
+                  BudgetBreadcrumbs.viewBoard(boardId),
+                  BudgetBreadcrumbs.settingsViewCategories(boardId),
+                  BudgetBreadcrumbs.settingsEditCategory(boardId, categoryId, false),
+                ];
+              },
+            },
+          },
         ],
       },
     ],

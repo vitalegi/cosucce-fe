@@ -31,6 +31,12 @@ export class BudgetPaths {
   public static settingsViewCategories(boardId: string): string {
     return `/budget/board/${boardId}/settings/categories`;
   }
+  public static settingsAddCategory(boardId: string): string {
+    return `/budget/board/${boardId}/settings/add-category`;
+  }
+  public static settingsEditCategory(boardId: string, categoryId: string): string {
+    return `/budget/board/${boardId}/settings/category/${categoryId}`;
+  }
 }
 
 export class BudgetRouting {
@@ -73,5 +79,18 @@ export class BudgetRouting {
     boardId: string,
   ): Promise<NavigationFailure | void | undefined> {
     return push(router, BudgetPaths.settingsViewCategories(boardId));
+  }
+  public settingsAddCategory(
+    router: Router,
+    boardId: string,
+  ): Promise<NavigationFailure | void | undefined> {
+    return push(router, BudgetPaths.settingsAddCategory(boardId));
+  }
+  public settingsEditCategory(
+    router: Router,
+    boardId: string,
+    categoryId: string,
+  ): Promise<NavigationFailure | void | undefined> {
+    return push(router, BudgetPaths.settingsEditCategory(boardId, categoryId));
   }
 }
