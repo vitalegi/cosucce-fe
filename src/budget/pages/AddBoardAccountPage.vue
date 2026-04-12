@@ -3,7 +3,7 @@
     <BoardAccountEditor
       :boardId="boardId"
       label=""
-      icon=""
+      :icon="IconUtil.randomIcon().icon"
       :enabled="true"
       @save="save"
     ></BoardAccountEditor>
@@ -17,6 +17,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { toBoardId } from 'src/budget/util/budget-route-params-util';
 import BoardAccountEditor from 'src/budget/components/accounts/BoardAccountEditor.vue';
 import routing from 'src/router/routing';
+import IconUtil from 'src/budget/util/icon-util';
 
 const route = useRoute();
 const router = useRouter();

@@ -1,6 +1,11 @@
 <template>
   <q-form class="col-12 q-gutter-y-md" style="max-width: 600px" greedy @submit="submit()">
-    <q-input outlined v-model="editor.label" label="Label" />
+    <q-input
+      outlined
+      v-model="editor.label"
+      label="Label"
+      :rules="[(v) => v.trim() !== '' || 'La label è obbligatoria']"
+    />
     <IconSelector v-model="editor.icon" />
     <q-checkbox outlined v-model="editor.enabled" label="Enabled" />
 
@@ -8,7 +13,7 @@
   </q-form>
 </template>
 <script setup lang="ts">
-import { computed, onUpdated, ref } from 'vue';
+import { computed, onMounted, onUpdated, ref } from 'vue';
 import UuidUtil from 'src/utils/uuid-util';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
 import IconSelector from 'src/budget/components/commons/IconSelector.vue';
@@ -40,9 +45,9 @@ const addMode = computed(() => props.id === undefined);
 
 const submitLabel = computed(() => {
   if (addMode.value) {
-    return 'Add';
+    return 'Aggiungi';
   }
-  return 'Update';
+  return 'Modifica';
 });
 
 async function submit(): Promise<void> {
@@ -91,5 +96,6 @@ function init() {
   }
 }
 
+onMounted(() => init());
 onUpdated(() => init());
 </script>
