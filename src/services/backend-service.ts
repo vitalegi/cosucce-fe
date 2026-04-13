@@ -6,6 +6,9 @@ import Base64Utils from 'src/utils/base64';
 import axios from 'axios';
 import { AxiosWrapperAuth, AxiosWrapperPublic } from './authenticated-axios';
 import { useUserStore } from 'src/stores/user-store';
+import BoardAccountResource from 'src/budget/services/board-account-resource';
+import BoardCategoryResource from 'src/budget/services/board-category-resource';
+import BoardEntryResource from 'src/budget/services/board-entry-resource';
 
 function oidcUrl() {
   if (process.env.OIDC_URL !== undefined) {
@@ -89,11 +92,17 @@ class BackendService {
   private _publicApi;
   private _oidcService;
   private _boardResource;
+  private _boardAccountResource;
+  private _boardCategoryResource;
+  private _boardEntryResource;
 
   public constructor(publicApi: AxiosWrapperPublic, authenticatedApi: AxiosWrapperAuth) {
     this._publicApi = publicApi;
     this._oidcService = new OidcService(publicApi);
     this._boardResource = new BoardResource(authenticatedApi);
+    this._boardAccountResource = new BoardAccountResource(authenticatedApi);
+    this._boardCategoryResource = new BoardCategoryResource(authenticatedApi);
+    this._boardEntryResource = new BoardEntryResource(authenticatedApi);
   }
 
   public oidcService(): OidcService {
@@ -101,6 +110,15 @@ class BackendService {
   }
   public boardResource(): BoardResource {
     return this._boardResource;
+  }
+  public boardAccountResource(): BoardAccountResource {
+    return this._boardAccountResource;
+  }
+  public boardCategoryResource(): BoardCategoryResource {
+    return this._boardCategoryResource;
+  }
+  public boardEntryResource(): BoardEntryResource {
+    return this._boardEntryResource;
   }
 
   public async uptime(): Promise<BackendStatus> {

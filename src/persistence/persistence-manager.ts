@@ -5,8 +5,6 @@ import {
   UpdateBoardPersistence,
 } from './board-persistence-engine';
 import Board from 'src/budget/models/board';
-import { authenticatedApi } from 'src/services/backend-service';
-import { AxiosWrapperAuth } from 'src/services/authenticated-axios';
 import { Action, EntityType } from 'src/models/changelog';
 import {
   AddBoardEntryPersistence,
@@ -46,36 +44,22 @@ export class PersistenceManager {
   private _updateBoardCategory;
   private _deleteBoardCategory;
 
-  public constructor(authenticatedApi: AxiosWrapperAuth) {
-    this._addBoard = new PersistenceEngine(new AddBoardPersistence(authenticatedApi));
-    this._updateBoard = new PersistenceEngine(new UpdateBoardPersistence(authenticatedApi));
-    this._deleteBoard = new PersistenceEngine(new DeleteBoardPersistence(authenticatedApi));
+  public constructor() {
+    this._addBoard = new PersistenceEngine(new AddBoardPersistence());
+    this._updateBoard = new PersistenceEngine(new UpdateBoardPersistence());
+    this._deleteBoard = new PersistenceEngine(new DeleteBoardPersistence());
 
-    this._addBoardEntry = new PersistenceEngine(new AddBoardEntryPersistence(authenticatedApi));
-    this._updateBoardEntry = new PersistenceEngine(
-      new UpdateBoardEntryPersistence(authenticatedApi),
-    );
-    this._deleteBoardEntry = new PersistenceEngine(
-      new DeleteBoardEntryPersistence(authenticatedApi),
-    );
+    this._addBoardEntry = new PersistenceEngine(new AddBoardEntryPersistence());
+    this._updateBoardEntry = new PersistenceEngine(new UpdateBoardEntryPersistence());
+    this._deleteBoardEntry = new PersistenceEngine(new DeleteBoardEntryPersistence());
 
-    this._addBoardAccount = new PersistenceEngine(new AddBoardAccountPersistence(authenticatedApi));
-    this._updateBoardAccount = new PersistenceEngine(
-      new UpdateBoardAccountPersistence(authenticatedApi),
-    );
-    this._deleteBoardAccount = new PersistenceEngine(
-      new DeleteBoardAccountPersistence(authenticatedApi),
-    );
+    this._addBoardAccount = new PersistenceEngine(new AddBoardAccountPersistence());
+    this._updateBoardAccount = new PersistenceEngine(new UpdateBoardAccountPersistence());
+    this._deleteBoardAccount = new PersistenceEngine(new DeleteBoardAccountPersistence());
 
-    this._addBoardCategory = new PersistenceEngine(
-      new AddBoardCategoryPersistence(authenticatedApi),
-    );
-    this._updateBoardCategory = new PersistenceEngine(
-      new UpdateBoardCategoryPersistence(authenticatedApi),
-    );
-    this._deleteBoardCategory = new PersistenceEngine(
-      new DeleteBoardCategoryPersistence(authenticatedApi),
-    );
+    this._addBoardCategory = new PersistenceEngine(new AddBoardCategoryPersistence());
+    this._updateBoardCategory = new PersistenceEngine(new UpdateBoardCategoryPersistence());
+    this._deleteBoardCategory = new PersistenceEngine(new DeleteBoardCategoryPersistence());
 
     this._persistences = [
       { a: 'add', t: 'board', e: this._addBoard },
@@ -147,5 +131,5 @@ export class PersistenceManager {
   }
 }
 
-const persistenceManager = new PersistenceManager(authenticatedApi);
+const persistenceManager = new PersistenceManager();
 export default persistenceManager;

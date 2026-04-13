@@ -3,6 +3,9 @@ import localDb from 'src/persistence/local-db';
 import persistenceManager from 'src/persistence/persistence-manager';
 import backendService from 'src/services/backend-service';
 import Board from 'src/budget/models/board';
+import BoardAccount from 'src/budget/models/board-account';
+import BoardCategory from 'src/budget/models/board-category';
+import BoardEntry from 'src/budget/models/board-entry';
 
 function ts() {
   return Date.now();
@@ -73,8 +76,8 @@ class BoardSyncServer2Client extends SyncServer2Client<Board> {
   protected override name(): string {
     return 'Board';
   }
-  protected override getFromRemote(): Promise<Board[]> {
-    return backendService.boardResource().getAll();
+  protected override async getFromRemote(): Promise<Board[]> {
+    return (await backendService.boardResource().getAllVisible()).data.map(Board.fromJson);
   }
   protected override async getLocalIds(): Promise<string[]> {
     return (await localDb.boards.toArray()).map((b) => b.boardId);
@@ -90,11 +93,80 @@ class BoardSyncServer2Client extends SyncServer2Client<Board> {
   }
 }
 
+class BoardAccountSyncServer2Client extends SyncServer2Client<BoardAccount> {
+  protected override name(): string {
+    return 'BoardAccount';
+  }
+  protected override async getFromRemote(): Promise<BoardAccount[]> {
+    return (await backendService.boardAccountResource().getAllVisible(false)).data // //
+      .map(BoardAccount.fromJson);
+  }
+  protected override async getLocalIds(): Promise<string[]> {
+    return (await localDb.boardAccounts.toArray()).map((b) => b.accountId);
+  }
+  protected override getRemoteIds(elements: BoardAccount[]): string[] {
+    return elements.map((b) => b.accountId);
+  }
+  protected override deleteFromLocal(ids: string[]): Promise<void> {
+    return localDb.boardAccounts.bulkDelete(ids);
+  }
+  protected override async bulkPut(elements: BoardAccount[]): Promise<void> {
+    await localDb.boardAccounts.bulkPut(elements);
+  }
+}
+
+class BoardCategorySyncServer2Client extends SyncServer2Client<BoardCategory> {
+  protected override name(): string {
+    return 'BoardCategory';
+  }
+  protected override async getFromRemote(): Promise<BoardCategory[]> {
+    return (await backendService.boardCategoryResource().getAllVisible(false)).data //
+      .map(BoardCategory.fromJson);
+  }
+  protected override async getLocalIds(): Promise<string[]> {
+    return (await localDb.boardCategories.toArray()).map((b) => b.categoryId);
+  }
+  protected override getRemoteIds(elements: BoardCategory[]): string[] {
+    return elements.map((b) => b.categoryId);
+  }
+  protected override deleteFromLocal(ids: string[]): Promise<void> {
+    return localDb.boardCategories.bulkDelete(ids);
+  }
+  protected override async bulkPut(elements: BoardCategory[]): Promise<void> {
+    await localDb.boardCategories.bulkPut(elements);
+  }
+}
+
+class BoardEntrySyncServer2Client extends SyncServer2Client<BoardEntry> {
+  protected override name(): string {
+    return 'BoardEntry';
+  }
+  protected override async getFromRemote(): Promise<BoardEntry[]> {
+    return (await backendService.boardEntryResource().getAllVisible(false)).data //
+      .map(BoardEntry.fromJson);
+  }
+  protected override async getLocalIds(): Promise<string[]> {
+    return (await localDb.boardEntries.toArray()).map((b) => b.entryId);
+  }
+  protected override getRemoteIds(elements: BoardEntry[]): string[] {
+    return elements.map((b) => b.entryId);
+  }
+  protected override deleteFromLocal(ids: string[]): Promise<void> {
+    return localDb.boardEntries.bulkDelete(ids);
+  }
+  protected override async bulkPut(elements: BoardEntry[]): Promise<void> {
+    await localDb.boardEntries.bulkPut(elements);
+  }
+}
+
 export class BudgetSyncService {
   server2clients;
   public constructor() {
     this.server2clients = new Array<SyncServer2Client<unknown>>();
     this.server2clients.push(new BoardSyncServer2Client());
+    this.server2clients.push(new BoardAccountSyncServer2Client());
+    this.server2clients.push(new BoardCategorySyncServer2Client());
+    this.server2clients.push(new BoardEntrySyncServer2Client());
   }
 
   public async synchronize(): Promise<void> {

@@ -4,8 +4,8 @@ import localDb from './local-db';
 import { AbstractChangelogFactory, ChangelogFactory } from './changelog/changelog-factory';
 import LocalPersistence from './local/local-persistence';
 import RemotePersistence from './remote/remote-persistence';
-import { AxiosWrapperAuth } from 'src/services/authenticated-axios';
 import BoardCategory from 'src/budget/models/board-category';
+import backendService from 'src/services/backend-service';
 
 class BoardCategoryChangelogFactory extends AbstractChangelogFactory<BoardCategory> {
   protected override _entityId(entity: BoardCategory): string {
@@ -33,11 +33,9 @@ class BoardCategoryChangelogFactory extends AbstractChangelogFactory<BoardCatego
 
 abstract class AbstractBoardCategoryPersistence implements ChangelogFactory<BoardCategory> {
   private _factory;
-  protected _axios;
 
-  public constructor(axios: AxiosWrapperAuth) {
+  public constructor() {
     this._factory = new BoardCategoryChangelogFactory();
-    this._axios = axios;
   }
 
   async addChangelog(action: Action, entity: BoardCategory): Promise<Changelog> {
@@ -49,8 +47,8 @@ export class AddBoardCategoryPersistence
   extends AbstractBoardCategoryPersistence
   implements LocalPersistence<BoardCategory>, RemotePersistence
 {
-  public constructor(axios: AxiosWrapperAuth) {
-    super(axios);
+  public constructor() {
+    super();
   }
 
   async executeLocal(entity: BoardCategory): Promise<void> {
@@ -58,19 +56,18 @@ export class AddBoardCategoryPersistence
   }
   async executeRemote(changelog: Changelog, allowSSORedirect: boolean): Promise<AxiosResponse> {
     const entity = changelog.payload;
-    return await this._axios.post(
-      `/budget/board/${entity.boardId}/category`,
-      {
-        categoryId: entity.categoryId,
-        label: entity.label,
-        icon: entity.icon,
-        color: entity.color,
-        enabled: entity.enabled,
-        etag: changelog.newETag,
-      },
-      {},
-      allowSSORedirect,
-    );
+    return await backendService
+      .boardCategoryResource()
+      .add(
+        entity.boardId,
+        entity.categoryId,
+        entity.label,
+        entity.icon,
+        entity.color,
+        entity.enabled,
+        changelog.newETag,
+        allowSSORedirect,
+      );
   }
 }
 
@@ -78,31 +75,27 @@ export class UpdateBoardCategoryPersistence
   extends AbstractBoardCategoryPersistence
   implements LocalPersistence<BoardCategory>, RemotePersistence
 {
-  public constructor(axios: AxiosWrapperAuth) {
-    super(axios);
+  public constructor() {
+    super();
   }
   async executeLocal(entity: BoardCategory): Promise<void> {
     await localDb.boardCategories.put(entity);
   }
   async executeRemote(changelog: Changelog, allowSSORedirect: boolean): Promise<AxiosResponse> {
     const entity = changelog.payload;
-    return await this._axios.put(
-      `/budget/board/${entity.boardId}/category`,
-      {
-        categoryId: entity.categoryId,
-        label: entity.label,
-        icon: entity.icon,
-        color: entity.color,
-        enabled: entity.enabled,
-        etag: changelog.newETag,
-      },
-      {
-        headers: {
-          'x-etag': changelog.oldETag,
-        },
-      },
-      allowSSORedirect,
-    );
+    return await backendService
+      .boardCategoryResource()
+      .update(
+        entity.boardId,
+        entity.categoryId,
+        entity.label,
+        entity.icon,
+        entity.color,
+        entity.enabled,
+        changelog.newETag,
+        changelog.oldETag,
+        allowSSORedirect,
+      );
   }
 }
 
@@ -110,18 +103,16 @@ export class DeleteBoardCategoryPersistence
   extends AbstractBoardCategoryPersistence
   implements LocalPersistence<BoardCategory>, RemotePersistence
 {
-  public constructor(axios: AxiosWrapperAuth) {
-    super(axios);
+  public constructor() {
+    super();
   }
 
   async executeLocal(entity: BoardCategory): Promise<void> {
     await localDb.boards.delete(entity.boardId);
   }
   async executeRemote(changelog: Changelog, allowSSORedirect: boolean): Promise<AxiosResponse> {
-    return await this._axios.delete(
-      `/budget/board/${changelog.payload.boardId}/category/${changelog.payload.entryId}`,
-      {},
-      allowSSORedirect,
-    );
+    return await await backendService
+      .boardCategoryResource()
+      .delete(changelog.payload.boardId, changelog.payload.entryId, allowSSORedirect);
   }
 }
