@@ -3,10 +3,8 @@
     <DateSelector outlined v-model="editor.date" :mask="DateUtil.Q_DATE_MASK" label="Date" />
     <BoardAccountSelector :board-id="boardId" label="Account" v-model="editor.accountId" />
     <BoardCategorySelector :board-id="boardId" label="Categoria" v-model="editor.categoryId" />
-    <q-input outlined v-model="editor.categoryId" label="Category" />
     <q-input outlined v-model="editor.description" label="Description" />
-    <q-input outlined v-model="editor.amount" label="Amount" />
-
+    <AmountSelector v-model="editor.amount" label="Importo" />
     <q-btn class="full-width" size="xl" type="submit" color="primary">{{ submitLabel }}</q-btn>
   </q-form>
 </template>
@@ -19,6 +17,8 @@ import DateUtil from 'src/utils/date-util';
 import { format } from 'date-fns/format';
 import BoardAccountSelector from 'src/budget/components/accounts/BoardAccountSelector.vue';
 import BoardCategorySelector from 'src/budget/components/categories/BoardCategorySelector.vue';
+import AmountSelector from 'src/budget/components/board-entries/AmountSelector.vue';
+import NumberUtil from 'src/utils/number-util';
 
 const emit = defineEmits(['save']);
 
@@ -58,6 +58,10 @@ const submitLabel = computed(() => {
   return 'Update';
 });
 
+function formatAmount(): string {
+  return NumberUtil.formatBigDecimal(editor.value.amount);
+}
+
 async function submit(): Promise<void> {
   const date = DateUtil.convertDate(
     editor.value.date,
@@ -73,7 +77,7 @@ async function submit(): Promise<void> {
       accountId: editor.value.accountId,
       categoryId: editor.value.categoryId,
       description: editor.value.description.trim(),
-      amount: editor.value.amount,
+      amount: formatAmount(),
     });
     emit('save', {
       id: id,
@@ -89,7 +93,7 @@ async function submit(): Promise<void> {
       accountId: editor.value.accountId,
       categoryId: editor.value.categoryId,
       description: editor.value.description.trim(),
-      amount: editor.value.amount,
+      amount: formatAmount(),
     });
     emit('save', {
       id: props.id,

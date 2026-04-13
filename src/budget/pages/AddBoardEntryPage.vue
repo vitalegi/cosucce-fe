@@ -28,7 +28,7 @@ const router = useRouter();
 void budgetSyncService.synchronize();
 
 async function save(): Promise<void> {
-  await routing.budget().viewBoards(router);
+  await routing.budget().viewBoard(router, boardId.value);
 }
 const boardId = ref<string>(toBoardId(route.params));
 

@@ -1,3 +1,4 @@
+import bigDecimal from 'js-big-decimal';
 import ObjectUtil from './object-util';
 
 export default class NumberUtil {
@@ -50,5 +51,10 @@ export default class NumberUtil {
         maximumFractionDigits: 2,
       }).format(value * 100) + '%'
     );
+  }
+  public static formatBigDecimal(value: string): string {
+    return new bigDecimal(value.replace(',', '.'))
+      .stripTrailingZero()
+      .getPrettyValue(undefined, '');
   }
 }
