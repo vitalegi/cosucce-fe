@@ -1,7 +1,7 @@
 <template>
   <q-form class="col-12 q-gutter-y-md" style="max-width: 600px" greedy @submit="submit()">
     <DateSelector outlined v-model="editor.date" :mask="DateUtil.Q_DATE_MASK" label="Date" />
-    <q-input outlined v-model="editor.accountId" label="Account" />
+    <BoardAccountSelector :board-id="boardId" label="Account" v-model="editor.accountId" />
     <q-input outlined v-model="editor.categoryId" label="Category" />
     <q-input outlined v-model="editor.description" label="Description" />
     <q-input outlined v-model="editor.amount" label="Amount" />
@@ -16,6 +16,7 @@ import { useBudgetStore } from 'src/budget/stores/budget-store';
 import DateSelector from 'src/budget/components/board-entries/DateSelector.vue';
 import DateUtil from 'src/utils/date-util';
 import { format } from 'date-fns/format';
+import BoardAccountSelector from 'src/budget/components/accounts/BoardAccountSelector.vue';
 
 const emit = defineEmits(['save']);
 

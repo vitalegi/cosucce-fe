@@ -5,7 +5,7 @@
     readonly
     v-model="model"
     hide-bottom-space
-    :rules="[(val) => (val && val.trim().length !== 0) || 'Value is mandatory']"
+    :rules="[(val) => (val && val.trim().length !== 0) || 'Campo obbligatorio']"
   >
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
