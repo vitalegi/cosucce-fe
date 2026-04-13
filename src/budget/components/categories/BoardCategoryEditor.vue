@@ -17,6 +17,7 @@ import { computed, onMounted, onUpdated, ref } from 'vue';
 import UuidUtil from 'src/utils/uuid-util';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
 import IconSelector from 'src/budget/components/commons/IconSelector.vue';
+import IconUtil from 'src/budget/util/icon-util';
 
 const emit = defineEmits(['save']);
 
@@ -58,6 +59,7 @@ async function submit(): Promise<void> {
       boardId: props.boardId,
       label: editor.value.label.trim(),
       icon: editor.value.icon,
+      color: IconUtil.getIcon(editor.value.icon).color,
       enabled: editor.value.enabled,
     });
     emit('save', {
@@ -72,6 +74,7 @@ async function submit(): Promise<void> {
       boardId: props.boardId,
       label: editor.value.label.trim(),
       icon: editor.value.icon,
+      color: IconUtil.getIcon(editor.value.icon).color,
       enabled: editor.value.enabled,
     });
     emit('save', {

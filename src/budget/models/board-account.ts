@@ -7,6 +7,7 @@ export default class BoardAccount {
   etag = '';
   label = '';
   icon = '';
+  color = '';
   enabled = true;
   creationDate = new Date();
   lastUpdate = new Date();
@@ -21,6 +22,7 @@ export default class BoardAccount {
     out.etag = ObjectUtil.propAsString(obj, 'etag');
     out.label = ObjectUtil.propAsString(obj, 'label');
     out.icon = ObjectUtil.propAsString(obj, 'icon');
+    out.color = ObjectUtil.propAsString(obj, 'color');
     out.enabled = ObjectUtil.propAsBoolean(obj, 'enabled');
     out.creationDate = ObjectUtil.propAsDate(obj, 'creationDate');
     out.lastUpdate = ObjectUtil.propAsDate(obj, 'lastUpdate');
@@ -29,7 +31,7 @@ export default class BoardAccount {
 
   public static hash(e: BoardAccount): string {
     const str = JSON.stringify(
-      [e.accountId, e.boardId, e.label, e.icon, e.enabled].filter((e) => !!e),
+      [e.accountId, e.boardId, e.label, e.icon, e.color, e.enabled].filter((e) => !!e),
     );
     return MD5(str).toString();
   }

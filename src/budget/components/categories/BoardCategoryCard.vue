@@ -4,7 +4,7 @@
       <div class="text-weight-medium single-line-nowrap-text">
         {{ element.label }}
       </div>
-      <IconDisplay :icon="element.icon" :enabled="element.enabled" />
+      <IconDisplay :icon="element.icon" :color="element.color" :enabled="element.enabled" />
     </div>
   </q-card>
 </template>

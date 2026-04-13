@@ -27,6 +27,7 @@ type BoardAccountElement = {
   boardId: string;
   label: string;
   icon: string;
+  color: string;
   enabled: boolean;
 };
 
@@ -35,6 +36,7 @@ type BoardCategoryElement = {
   boardId: string;
   label: string;
   icon: string;
+  color: string;
   enabled: boolean;
 };
 
@@ -65,6 +67,7 @@ function createBoardAccount(data: BoardAccountElement): BoardAccount {
   e.boardId = data.boardId;
   e.label = data.label;
   e.icon = data.icon;
+  e.color = data.color;
   e.enabled = data.enabled;
   e.creationDate = new Date();
   e.lastUpdate = new Date();
@@ -76,6 +79,7 @@ function createBoardCategory(data: BoardCategoryElement): BoardCategory {
   e.boardId = data.boardId;
   e.label = data.label;
   e.icon = data.icon;
+  e.color = data.color;
   e.enabled = data.enabled;
   e.creationDate = new Date();
   e.lastUpdate = new Date();

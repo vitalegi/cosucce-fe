@@ -2,23 +2,19 @@
   <q-btn
     outline
     square
-    :icon="data.icon"
-    :color="data.color"
+    :icon="icon"
+    :color="color"
     :disable="!enabled"
     size="xl"
     class="full-width"
   />
 </template>
 <script setup lang="ts">
-import IconUtil from 'src/budget/util/icon-util';
-import { computed } from 'vue';
-
 interface Props {
   icon: string;
+  color: string;
   enabled: boolean;
 }
 
-const props = defineProps<Props>();
-
-const data = computed(() => IconUtil.getIcon(props.icon));
+defineProps<Props>();
 </script>
