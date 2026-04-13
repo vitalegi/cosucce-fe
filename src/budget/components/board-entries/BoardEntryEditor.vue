@@ -1,6 +1,6 @@
 <template>
   <q-form class="col-12 q-gutter-y-md" style="max-width: 600px" greedy @submit="submit()">
-    <q-input outlined v-model="editor.date" label="Date" />
+    <DateSelector outlined v-model="editor.date" :mask="DateUtil.Q_DATE_MASK" label="Date" />
     <q-input outlined v-model="editor.accountId" label="Account" />
     <q-input outlined v-model="editor.categoryId" label="Category" />
     <q-input outlined v-model="editor.description" label="Description" />
@@ -13,6 +13,9 @@
 import { computed, onMounted, ref } from 'vue';
 import UuidUtil from 'src/utils/uuid-util';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
+import DateSelector from 'src/budget/components/board-entries/DateSelector.vue';
+import DateUtil from 'src/utils/date-util';
+import { format } from 'date-fns/format';
 
 const emit = defineEmits(['save']);
 
@@ -53,12 +56,17 @@ const submitLabel = computed(() => {
 });
 
 async function submit(): Promise<void> {
+  const date = DateUtil.convertDate(
+    editor.value.date,
+    DateUtil.Q_DATE_MASK_FORMAT,
+    DateUtil.LOCAL_DATE_FORMAT,
+  );
   if (addMode.value) {
     const id = UuidUtil.uuid();
     await budgetStore.addBoardEntry({
       entryId: id,
       boardId: props.boardId,
-      date: editor.value.date,
+      date: date,
       accountId: editor.value.accountId,
       categoryId: editor.value.categoryId,
       description: editor.value.description.trim(),
@@ -74,7 +82,7 @@ async function submit(): Promise<void> {
     await budgetStore.updateBoardEntry({
       entryId: props.id,
       boardId: props.boardId,
-      date: editor.value.date,
+      date: date,
       accountId: editor.value.accountId,
       categoryId: editor.value.categoryId,
       description: editor.value.description.trim(),
@@ -87,7 +95,7 @@ async function submit(): Promise<void> {
 }
 
 onMounted(() => {
-  editor.value.date = '';
+  editor.value.date = format(new Date(), DateUtil.Q_DATE_MASK_FORMAT);
   editor.value.accountId = '';
   editor.value.categoryId = '';
   editor.value.description = '';
@@ -97,7 +105,11 @@ onMounted(() => {
     editor.value.accountId = props.accountId;
   }
   if (props.date) {
-    editor.value.date = props.date;
+    editor.value.date = DateUtil.convertDate(
+      props.date,
+      DateUtil.LOCAL_DATE_FORMAT,
+      DateUtil.Q_DATE_MASK_FORMAT,
+    );
   }
   if (props.categoryId) {
     editor.value.categoryId = props.categoryId;

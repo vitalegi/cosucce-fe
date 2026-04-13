@@ -1,8 +1,16 @@
 import { date } from 'quasar';
+import { format } from 'date-fns/format';
+import { parse } from 'date-fns/parse';
 
 export default class DateUtil {
-  public static readonly Q_DATE_FORMAT = 'dd/MM/yyyy';
   public static readonly Q_DATE_MASK = 'DD/MM/YYYY';
+  public static readonly Q_DATE_MASK_FORMAT = 'dd/MM/yyyy';
+  public static readonly LOCAL_DATE_FORMAT = 'yyyy-MM-dd';
+
+  public static convertDate(date: string, inFormat: string, outFormat: string) {
+    const temp = parse(date, inFormat, new Date());
+    return format(temp, outFormat);
+  }
 
   public static formatElapsedTime = (date: Date, now: Date): string => {
     const diff = now.getTime() - date.getTime();
