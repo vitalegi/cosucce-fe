@@ -1,11 +1,10 @@
 <template>
   <q-page class="row items-start justify-evenly q-pa-md">
-    <CommonBreadcrumbs />
-    <BoardEntriesTable
-      :board-id="boardId"
-      @add="addBoardEntry"
-      @update="updateBoardEntry"
-    ></BoardEntriesTable>
+    <div class="main-content col-12">
+      <CommonBreadcrumbs />
+      <TimeIntervalSlideItem class="q-mb-sm" />
+      <BoardEntriesTable :board-id="boardId" @add="addBoardEntry" @update="updateBoardEntry" />
+    </div>
   </q-page>
 </template>
 
@@ -16,6 +15,7 @@ import { toBoardId } from 'src/budget/util/budget-route-params-util';
 import BoardEntriesTable from 'src/budget/components/board-entries/BoardEntriesTable.vue';
 import routing from 'src/router/routing';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
+import TimeIntervalSlideItem from 'src/budget/time-interval/components/TimeIntervalSlideItem.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -36,3 +36,12 @@ watch(
   },
 );
 </script>
+<style scoped lang="scss">
+.main-content {
+  overflow: auto;
+}
+
+.q-tab-panels {
+  background-color: transparent;
+}
+</style>

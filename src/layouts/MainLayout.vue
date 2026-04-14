@@ -18,7 +18,14 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered v-if="mainLayoutStore.isBudgetView">
+      <div class="row items-start justify-start q-px-md">
+        <div class="col-12 q-gutter-sm">
+          <TimeIntervalSelector></TimeIntervalSelector>
+        </div>
+      </div>
+    </q-drawer>
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered v-if="!mainLayoutStore.isBudgetView">
       <q-list>
         <q-item-label header> Essential Links </q-item-label>
 
@@ -59,6 +66,7 @@ import { useMainLayoutStore } from 'src/stores/main-layout-store';
 import routing from 'src/router/routing';
 import { useRouter } from 'vue-router';
 import UserStatus from 'src/auth/UserStatus.vue';
+import TimeIntervalSelector from 'src/budget/time-interval/components/TimeIntervalSelector.vue';
 
 const mainLayoutStore = useMainLayoutStore();
 
