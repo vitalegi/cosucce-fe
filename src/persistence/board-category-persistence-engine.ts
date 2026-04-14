@@ -21,7 +21,7 @@ class BoardCategoryChangelogFactory extends AbstractChangelogFactory<BoardCatego
     if (e === undefined) {
       return undefined;
     }
-    return BoardCategory.hash(e);
+    return e.etag;
   }
   protected override _newETag(entity: BoardCategory): string {
     return BoardCategory.hash(entity);
