@@ -9,7 +9,7 @@
   </q-form>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUpdated, ref } from 'vue';
 import UuidUtil from 'src/utils/uuid-util';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
 import DateSelector from 'src/budget/components/board-entries/DateSelector.vue';
@@ -101,7 +101,7 @@ async function submit(): Promise<void> {
   }
 }
 
-onMounted(() => {
+function refreshData() {
   editor.value.date = format(new Date(), DateUtil.Q_DATE_MASK_FORMAT);
   editor.value.accountId = '';
   editor.value.categoryId = '';
@@ -127,5 +127,8 @@ onMounted(() => {
   if (props.accountId) {
     editor.value.amount = props.amount;
   }
-});
+}
+
+onMounted(() => refreshData());
+onUpdated(() => refreshData());
 </script>

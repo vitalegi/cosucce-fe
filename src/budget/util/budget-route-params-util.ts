@@ -12,3 +12,7 @@ export function toAccountId(params: RouteParams): string {
 export function toCategoryId(params: RouteParams): string {
   return castParamToString(params.categoryId);
 }
+
+export function toEntryId(params: RouteParams): string {
+  return castParamToString(params.entryId);
+}

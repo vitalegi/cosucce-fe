@@ -19,6 +19,9 @@ export class BudgetPaths {
   public static addBoardEntry(boardId: string): string {
     return `/budget/board/${boardId}/add-entry`;
   }
+  public static editBoardEntry(boardId: string, entryId: string): string {
+    return `/budget/board/${boardId}/entry/${entryId}`;
+  }
   public static settingsViewAccounts(boardId: string): string {
     return `/budget/board/${boardId}/settings/accounts`;
   }
@@ -54,6 +57,13 @@ export class BudgetRouting {
     boardId: string,
   ): Promise<NavigationFailure | void | undefined> {
     return push(router, BudgetPaths.addBoardEntry(boardId));
+  }
+  public editBoardEntry(
+    router: Router,
+    boardId: string,
+    entryId: string,
+  ): Promise<NavigationFailure | void | undefined> {
+    return push(router, BudgetPaths.editBoardEntry(boardId, entryId));
   }
   public settingsViewAccounts(
     router: Router,

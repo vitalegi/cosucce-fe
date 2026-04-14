@@ -1,7 +1,11 @@
 <template>
   <q-page class="row items-start justify-evenly q-pa-md">
     <CommonBreadcrumbs />
-    <BoardEntriesTable :board-id="boardId" @add="addBoardEntry"></BoardEntriesTable>
+    <BoardEntriesTable
+      :board-id="boardId"
+      @add="addBoardEntry"
+      @update="updateBoardEntry"
+    ></BoardEntriesTable>
   </q-page>
 </template>
 
@@ -20,6 +24,10 @@ const boardId = ref<string>(toBoardId(route.params));
 
 function addBoardEntry(): Promise<unknown> {
   return routing.budget().addBoardEntry(router, boardId.value);
+}
+
+function updateBoardEntry(entryId: string): Promise<unknown> {
+  return routing.budget().editBoardEntry(router, boardId.value, entryId);
 }
 watch(
   () => route.params,

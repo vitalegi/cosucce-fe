@@ -71,6 +71,22 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'budget/board/:boardId/entry/:entryId',
+        component: () => import('/src/budget/pages/UpdateBoardEntryPage.vue'),
+        meta: {
+          breadcrumbs: (route: RouteLocationNormalized) => {
+            const boardId = castParamToString(route.params.boardId);
+            const entryId = castParamToString(route.params.entryId);
+            return [
+              home(),
+              BudgetBreadcrumbs.viewBoards(),
+              BudgetBreadcrumbs.viewBoard(boardId),
+              BudgetBreadcrumbs.updateBoardEntry(boardId, entryId, false),
+            ];
+          },
+        },
+      },
+      {
         path: 'budget/board/:boardId/settings/',
         children: [
           {

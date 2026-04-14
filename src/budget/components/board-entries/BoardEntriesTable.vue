@@ -12,6 +12,7 @@
     :pagination="pagination"
     :loading="loading"
     :grid="false"
+    @row-click="onRowClick"
   >
     <template v-slot:top>
       <div class="q-gutter-md justify-between full-width">
@@ -59,7 +60,7 @@ const pagination = {
   rowsPerPage: 5,
 };
 
-defineEmits(['update', 'add', 'delete']);
+const emits = defineEmits(['update', 'add', 'delete']);
 
 const columns: QTableColumn[] = [
   {
@@ -117,6 +118,11 @@ const columns: QTableColumn[] = [
     format: (val: Date) => DateUtil.timeDiff(val),
   },
 ];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+function onRowClick(evt: Event, row: any, index: number): void {
+  emits('update', row.entryId);
+}
 const entries = reactive({ items: new Array<BoardEntry>() });
 let subscription: Subscription | undefined;
 

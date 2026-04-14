@@ -6,20 +6,11 @@ import PersistenceEngine from 'src/persistence/persistence-engine';
 import { Action, EntityType } from 'src/models/changelog';
 import BoardAccount from 'src/budget/models/board-account';
 import BoardCategory from 'src/budget/models/board-category';
+import localDb from 'src/persistence/local-db';
 
 type BoardElement = {
   boardId: string;
   name: string;
-};
-
-type BoardEntryElement = {
-  entryId: string;
-  boardId: string;
-  date: string;
-  accountId: string;
-  categoryId: string;
-  description: string;
-  amount: string;
 };
 
 type BoardAccountElement = {
@@ -40,7 +31,66 @@ type BoardCategoryElement = {
   enabled: boolean;
 };
 
-function createBoardEntry(data: BoardEntryElement): BoardEntry {
+type BoardEntryElement = {
+  entryId: string;
+  boardId: string;
+  date: string;
+  accountId: string;
+  categoryId: string;
+  description: string;
+  amount: string;
+};
+
+function makeBoard(data: BoardElement, previousEntry?: Board): Board {
+  const e = new Board();
+  e.boardId = data.boardId;
+  e.name = data.name;
+  if (previousEntry) {
+    e.creationDate = previousEntry.creationDate;
+  } else {
+    e.creationDate = new Date();
+  }
+  e.lastUpdate = new Date();
+  return e;
+}
+
+function makeBoardAccount(data: BoardAccountElement, previousEntry?: BoardAccount): BoardAccount {
+  const e = new BoardAccount();
+  e.accountId = data.accountId;
+  e.boardId = data.boardId;
+  e.label = data.label;
+  e.icon = data.icon;
+  e.color = data.color;
+  e.enabled = data.enabled;
+  if (previousEntry) {
+    e.creationDate = previousEntry.creationDate;
+  } else {
+    e.creationDate = new Date();
+  }
+  e.lastUpdate = new Date();
+  return e;
+}
+function makeBoardCategory(
+  data: BoardCategoryElement,
+  previousEntry?: BoardCategory,
+): BoardCategory {
+  const e = new BoardCategory();
+  e.categoryId = data.categoryId;
+  e.boardId = data.boardId;
+  e.label = data.label;
+  e.icon = data.icon;
+  e.color = data.color;
+  e.enabled = data.enabled;
+  if (previousEntry) {
+    e.creationDate = previousEntry.creationDate;
+  } else {
+    e.creationDate = new Date();
+  }
+  e.lastUpdate = new Date();
+  return e;
+}
+
+function makeBoardEntry(data: BoardEntryElement, previousEntry?: BoardEntry): BoardEntry {
   const e = new BoardEntry();
   e.entryId = data.entryId;
   e.boardId = data.boardId;
@@ -49,39 +99,11 @@ function createBoardEntry(data: BoardEntryElement): BoardEntry {
   e.categoryId = data.categoryId;
   e.description = data.description;
   e.amount = data.amount;
-  e.creationDate = new Date();
-  e.lastUpdate = new Date();
-  return e;
-}
-
-function createBoard(data: BoardElement): Board {
-  const e = new Board();
-  e.boardId = data.boardId;
-  e.name = data.name;
-  return e;
-}
-
-function createBoardAccount(data: BoardAccountElement): BoardAccount {
-  const e = new BoardAccount();
-  e.accountId = data.accountId;
-  e.boardId = data.boardId;
-  e.label = data.label;
-  e.icon = data.icon;
-  e.color = data.color;
-  e.enabled = data.enabled;
-  e.creationDate = new Date();
-  e.lastUpdate = new Date();
-  return e;
-}
-function createBoardCategory(data: BoardCategoryElement): BoardCategory {
-  const e = new BoardCategory();
-  e.categoryId = data.categoryId;
-  e.boardId = data.boardId;
-  e.label = data.label;
-  e.icon = data.icon;
-  e.color = data.color;
-  e.enabled = data.enabled;
-  e.creationDate = new Date();
+  if (previousEntry) {
+    e.creationDate = previousEntry.creationDate;
+  } else {
+    e.creationDate = new Date();
+  }
   e.lastUpdate = new Date();
   return e;
 }
@@ -107,16 +129,17 @@ export const useBudgetStore = defineStore('budget', {
       await execute<BoardElement, Board>(
         'board',
         'add',
-        (e) => createBoard(e),
+        (e) => makeBoard(e),
         persistenceManager.addBoard(),
         data,
       );
     },
     async updateBoard(data: BoardElement): Promise<void> {
+      const existingEntry = await localDb.boards.where('boardId').equals(data.boardId).first();
       await execute<BoardElement, Board>(
         'board',
         'update',
-        (e) => createBoard(e),
+        (e) => makeBoard(e, existingEntry),
         persistenceManager.updateBoard(),
         data,
       );
@@ -126,16 +149,20 @@ export const useBudgetStore = defineStore('budget', {
       await execute<BoardEntryElement, BoardEntry>(
         'board-entry',
         'add',
-        (e) => createBoardEntry(e),
+        (e) => makeBoardEntry(e, undefined),
         persistenceManager.addBoardEntry(),
         data,
       );
     },
     async updateBoardEntry(data: BoardEntryElement): Promise<void> {
+      const existingEntry = await localDb.boardEntries
+        .where('entryId')
+        .equals(data.entryId)
+        .first();
       await execute<BoardEntryElement, BoardEntry>(
         'board-entry',
         'update',
-        (e) => createBoardEntry(e),
+        (e) => makeBoardEntry(e, existingEntry),
         persistenceManager.updateBoardEntry(),
         data,
       );
@@ -145,16 +172,20 @@ export const useBudgetStore = defineStore('budget', {
       await execute<BoardAccountElement, BoardAccount>(
         'board-account',
         'add',
-        (e) => createBoardAccount(e),
+        (e) => makeBoardAccount(e),
         persistenceManager.addBoardAccount(),
         data,
       );
     },
     async updateBoardAccount(data: BoardAccountElement): Promise<void> {
+      const existingEntry = await localDb.boardAccounts
+        .where('accountId')
+        .equals(data.accountId)
+        .first();
       await execute<BoardAccountElement, BoardAccount>(
         'board-account',
         'update',
-        (e) => createBoardAccount(e),
+        (e) => makeBoardAccount(e, existingEntry),
         persistenceManager.updateBoardAccount(),
         data,
       );
@@ -164,16 +195,20 @@ export const useBudgetStore = defineStore('budget', {
       await execute<BoardCategoryElement, BoardCategory>(
         'board-category',
         'add',
-        (e) => createBoardCategory(e),
+        (e) => makeBoardCategory(e),
         persistenceManager.addBoardCategory(),
         data,
       );
     },
     async updateBoardCategory(data: BoardCategoryElement): Promise<void> {
+      const existingEntry = await localDb.boardCategories
+        .where('categoryId')
+        .equals(data.categoryId)
+        .first();
       await execute<BoardCategoryElement, BoardCategory>(
         'board-category',
         'update',
-        (e) => createBoardCategory(e),
+        (e) => makeBoardCategory(e, existingEntry),
         persistenceManager.updateBoardCategory(),
         data,
       );

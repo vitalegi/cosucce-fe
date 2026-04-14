@@ -14,6 +14,13 @@ export class BudgetBreadcrumbs {
   public static addBoardEntry(boardId: string, link: boolean = true): Breadcrumb {
     return { label: 'Add', to: link ? BudgetPaths.addBoardEntry(boardId) : undefined };
   }
+  public static updateBoardEntry(
+    boardId: string,
+    entryId: string,
+    link: boolean = true,
+  ): Breadcrumb {
+    return { label: 'Edit', to: link ? BudgetPaths.editBoardEntry(boardId, entryId) : undefined };
+  }
   public static settingsViewAccounts(boardId: string, link: boolean = true): Breadcrumb {
     return { label: 'Accounts', to: link ? BudgetPaths.settingsViewAccounts(boardId) : undefined };
   }
