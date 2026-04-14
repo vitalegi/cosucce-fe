@@ -73,6 +73,9 @@ export const useBudgetTimeIntervalStore = defineStore('budgetTimeInterval', {
       this.from = range.from;
       this.to = range.to;
     },
+    getAvailableSpans() {
+      return timeIntervalService(this.interval, this.amount).getAvailableSpans();
+    },
   },
 });
 
