@@ -6,6 +6,26 @@
       label="Label"
       :rules="[(v) => v.trim() !== '' || 'La label è obbligatoria']"
     />
+    <q-btn-group spread>
+      <q-btn
+        :color="editor.type === 'DEBIT' ? 'primary' : undefined"
+        label="Debit"
+        icon="remove"
+        @click="editor.type = 'DEBIT'"
+      />
+      <q-btn
+        :color="editor.type === 'CREDIT' ? 'primary' : undefined"
+        label="Credit"
+        icon="add"
+        @click="editor.type = 'CREDIT'"
+      />
+    </q-btn-group>
+    <q-input
+      outlined
+      v-model="editor.type"
+      label="Type"
+      :rules="[(v) => v.trim() !== '' || 'La label è obbligatoria']"
+    />
     <IconSelector v-model="editor.icon" />
     <q-checkbox outlined v-model="editor.enabled" label="Enabled" />
 
@@ -18,6 +38,7 @@ import UuidUtil from 'src/utils/uuid-util';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
 import IconSelector from 'src/budget/components/commons/IconSelector.vue';
 import IconUtil from 'src/budget/util/icon-util';
+import { BoardCategoryType } from 'src/budget/models/board-category';
 
 const emit = defineEmits(['save']);
 
@@ -25,6 +46,7 @@ interface Props {
   id?: string;
   boardId: string;
   label: string;
+  type: BoardCategoryType;
   icon: string;
   enabled: boolean;
 }
@@ -33,10 +55,12 @@ const props = withDefaults(defineProps<Props>(), { id: undefined });
 
 const editor = ref<{
   label: string;
+  type: BoardCategoryType;
   icon: string;
   enabled: boolean;
 }>({
   label: '',
+  type: 'DEBIT',
   icon: '',
   enabled: true,
 });
@@ -58,6 +82,7 @@ async function submit(): Promise<void> {
       categoryId: id,
       boardId: props.boardId,
       label: editor.value.label.trim(),
+      type: editor.value.type,
       icon: editor.value.icon,
       color: IconUtil.getIcon(editor.value.icon).color,
       enabled: editor.value.enabled,
@@ -73,6 +98,7 @@ async function submit(): Promise<void> {
       categoryId: props.id,
       boardId: props.boardId,
       label: editor.value.label.trim(),
+      type: editor.value.type,
       icon: editor.value.icon,
       color: IconUtil.getIcon(editor.value.icon).color,
       enabled: editor.value.enabled,

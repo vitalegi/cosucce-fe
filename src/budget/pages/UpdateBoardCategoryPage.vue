@@ -5,6 +5,7 @@
       :boardId="boardId"
       :id="categoryId"
       :label="element?.label || ''"
+      :type="element?.type || 'DEBIT'"
       :icon="element?.icon || ''"
       :enabled="element?.enabled || false"
       @save="save"

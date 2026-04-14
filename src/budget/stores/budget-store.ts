@@ -5,7 +5,7 @@ import Board from 'src/budget/models/board';
 import PersistenceEngine from 'src/persistence/persistence-engine';
 import { Action, EntityType } from 'src/models/changelog';
 import BoardAccount from 'src/budget/models/board-account';
-import BoardCategory from 'src/budget/models/board-category';
+import BoardCategory, { BoardCategoryType } from 'src/budget/models/board-category';
 import localDb from 'src/persistence/local-db';
 
 type BoardElement = {
@@ -26,6 +26,7 @@ type BoardCategoryElement = {
   categoryId: string;
   boardId: string;
   label: string;
+  type: BoardCategoryType;
   icon: string;
   color: string;
   enabled: boolean;
@@ -78,6 +79,7 @@ function makeBoardCategory(
   e.categoryId = data.categoryId;
   e.boardId = data.boardId;
   e.label = data.label;
+  e.type = data.type;
   e.icon = data.icon;
   e.color = data.color;
   e.enabled = data.enabled;

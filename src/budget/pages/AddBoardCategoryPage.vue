@@ -5,6 +5,7 @@
       <BoardCategoryEditor
         :boardId="boardId"
         label=""
+        type="DEBIT"
         :icon="IconUtil.randomIcon().icon"
         :enabled="true"
         @save="save"

@@ -1,5 +1,6 @@
 import { AxiosWrapperAuth } from 'src/services/authenticated-axios';
 import { AxiosResponse } from 'axios';
+import { BoardCategoryType } from 'src/budget/models/board-category';
 
 export default class BoardCategoryResource {
   api;
@@ -21,6 +22,7 @@ export default class BoardCategoryResource {
     boardId: string,
     categoryId: string,
     label: string,
+    type: BoardCategoryType,
     icon: string,
     color: string,
     enabled: boolean,
@@ -32,6 +34,7 @@ export default class BoardCategoryResource {
       {
         categoryId: categoryId,
         label: label,
+        type: type,
         icon: icon,
         color: color,
         enabled: enabled,
@@ -45,6 +48,7 @@ export default class BoardCategoryResource {
     boardId: string,
     categoryId: string,
     label: string,
+    type: BoardCategoryType,
     icon: string,
     color: string,
     enabled: boolean,
@@ -57,6 +61,7 @@ export default class BoardCategoryResource {
       {
         categoryId: categoryId,
         label: label,
+        type: type,
         icon: icon,
         color: color,
         enabled: enabled,

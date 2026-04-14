@@ -18,7 +18,7 @@ export default class BoardResource {
     allowSSORedirect: boolean = true,
   ): Promise<AxiosResponse> {
     return await this.api.post(
-      `/budget/board/${boardId}`,
+      `/budget/board`,
       {
         boardId: boardId,
         name: name,

@@ -75,6 +75,12 @@ const columns: QTableColumn[] = [
     sortable: true,
   },
   {
+    name: 'type',
+    label: 'Type',
+    field: 'type',
+    sortable: true,
+  },
+  {
     name: 'icon',
     label: 'Icon',
     field: 'icon',
