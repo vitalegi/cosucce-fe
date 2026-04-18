@@ -10,7 +10,6 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, onUpdated, ref } from 'vue';
-import UuidUtil from 'src/utils/uuid-util';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
 import DateSelector from 'src/budget/components/board-entries/DateSelector.vue';
 import DateUtil from 'src/utils/date-util';
@@ -18,7 +17,8 @@ import { format } from 'date-fns/format';
 import BoardAccountSelector from 'src/budget/components/accounts/BoardAccountSelector.vue';
 import BoardCategorySelector from 'src/budget/components/categories/BoardCategorySelector.vue';
 import AmountSelector from 'src/budget/components/board-entries/AmountSelector.vue';
-import NumberUtil from 'src/utils/number-util';
+import { SafeBigDecimal } from 'src/utils/numbers/safe-big-decimal';
+import NumberUtil from 'src/utils/numbers/number-util';
 
 const emit = defineEmits(['save']);
 
@@ -29,7 +29,7 @@ interface Props {
   accountId: string;
   categoryId: string;
   description: string;
-  amount: string;
+  amount: SafeBigDecimal;
 }
 
 const props = withDefaults(defineProps<Props>(), { id: undefined });
@@ -58,10 +58,6 @@ const submitLabel = computed(() => {
   return 'Update';
 });
 
-function formatAmount(): string {
-  return NumberUtil.formatBigDecimal(editor.value.amount);
-}
-
 async function submit(): Promise<void> {
   const date = DateUtil.convertDate(
     editor.value.date,
@@ -69,18 +65,16 @@ async function submit(): Promise<void> {
     DateUtil.LOCAL_DATE_FORMAT,
   );
   if (addMode.value) {
-    const id = UuidUtil.uuid();
-    await budgetStore.addBoardEntry({
-      entryId: id,
+    const entryId = await budgetStore.addBoardEntry({
       boardId: props.boardId,
       date: date,
       accountId: editor.value.accountId,
       categoryId: editor.value.categoryId,
-      description: editor.value.description.trim(),
-      amount: formatAmount(),
+      description: editor.value.description,
+      amount: NumberUtil.formatBigDecimal(editor.value.amount),
     });
     emit('save', {
-      id: id,
+      id: entryId,
     });
   } else {
     if (props.id === undefined) {
@@ -92,8 +86,8 @@ async function submit(): Promise<void> {
       date: date,
       accountId: editor.value.accountId,
       categoryId: editor.value.categoryId,
-      description: editor.value.description.trim(),
-      amount: formatAmount(),
+      description: editor.value.description,
+      amount: NumberUtil.formatBigDecimal(editor.value.amount),
     });
     emit('save', {
       id: props.id,
@@ -125,7 +119,7 @@ function refreshData() {
     editor.value.description = props.description;
   }
   if (props.accountId) {
-    editor.value.amount = props.amount;
+    editor.value.amount = NumberUtil.formatBigDecimal(props.amount);
   }
 }
 

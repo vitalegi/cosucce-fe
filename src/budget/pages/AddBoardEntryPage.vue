@@ -7,7 +7,8 @@
       accountId=""
       categoryId=""
       description=""
-      amount=""
+      :amount="new bigDecimal('0')"
+      :creationDate="new Date()"
       @save="save"
     ></BoardEntryEditor>
   </q-page>
@@ -16,16 +17,14 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import BoardEntryEditor from 'src/budget/components/board-entries/BoardEntryEditor.vue';
-import budgetSyncService from 'src/budget/services/budget-sync';
 import { useRoute, useRouter } from 'vue-router';
 import { toBoardId } from 'src/budget/util/budget-route-params-util';
 import routing from 'src/router/routing';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
+import bigDecimal from 'js-big-decimal';
 
 const route = useRoute();
 const router = useRouter();
-
-void budgetSyncService.synchronize();
 
 async function save(): Promise<void> {
   await routing.budget().viewBoard(router, boardId.value);

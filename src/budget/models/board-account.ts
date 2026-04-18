@@ -1,14 +1,13 @@
-import { MD5 } from 'crypto-js';
 import ObjectUtil from 'src/utils/object-util';
 
 export default class BoardAccount {
   accountId = '';
   boardId = '';
-  etag = '';
   label = '';
   icon = '';
   color = '';
   enabled = true;
+  etag = '';
   creationDate = new Date();
   lastUpdate = new Date();
 
@@ -19,20 +18,13 @@ export default class BoardAccount {
     }
     out.accountId = ObjectUtil.propAsString(obj, 'accountId');
     out.boardId = ObjectUtil.propAsString(obj, 'boardId');
-    out.etag = ObjectUtil.propAsString(obj, 'etag');
     out.label = ObjectUtil.propAsString(obj, 'label');
     out.icon = ObjectUtil.propAsString(obj, 'icon');
     out.color = ObjectUtil.propAsString(obj, 'color');
     out.enabled = ObjectUtil.propAsBoolean(obj, 'enabled');
+    out.etag = ObjectUtil.propAsString(obj, 'etag');
     out.creationDate = ObjectUtil.propAsDate(obj, 'creationDate');
     out.lastUpdate = ObjectUtil.propAsDate(obj, 'lastUpdate');
     return out;
-  }
-
-  public static hash(e: BoardAccount): string {
-    const str = JSON.stringify(
-      [e.accountId, e.boardId, e.label, e.icon, e.color, e.enabled].filter((e) => !!e),
-    );
-    return MD5(str).toString();
   }
 }

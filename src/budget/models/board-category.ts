@@ -1,4 +1,3 @@
-import { MD5 } from 'crypto-js';
 import ObjectUtil from 'src/utils/object-util';
 
 export type BoardCategoryType = 'CREDIT' | 'DEBIT';
@@ -36,12 +35,5 @@ export default class BoardCategory {
     out.creationDate = ObjectUtil.propAsDate(obj, 'creationDate');
     out.lastUpdate = ObjectUtil.propAsDate(obj, 'lastUpdate');
     return out;
-  }
-
-  public static hash(e: BoardCategory): string {
-    const str = JSON.stringify(
-      [e.categoryId, e.boardId, e.label, e.icon, e.color, e.enabled].filter((e) => !!e),
-    );
-    return MD5(str).toString();
   }
 }

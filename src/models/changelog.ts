@@ -19,7 +19,7 @@ export default class Changelog {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any = {};
   oldETag: string | undefined;
-  newETag = '';
+  newETag: string | undefined;
   status: ChangelogStatus = 'new';
   creationDate = new Date();
   lastUpdate = new Date();

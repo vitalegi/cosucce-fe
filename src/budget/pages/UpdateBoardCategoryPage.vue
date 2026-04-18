@@ -15,29 +15,28 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import budgetSyncService from 'src/budget/services/budget-sync';
 import { useRoute, useRouter } from 'vue-router';
 import { toCategoryId, toBoardId } from 'src/budget/util/budget-route-params-util';
 import routing from 'src/router/routing';
-import localDb from 'src/persistence/local-db';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 import BoardCategoryEditor from 'src/budget/components/categories/BoardCategoryEditor.vue';
 import BoardCategory from 'src/budget/models/board-category';
+import { useBudgetStore } from 'src/budget/stores/budget-store';
 
 const route = useRoute();
 const router = useRouter();
-void budgetSyncService.synchronize();
+
+const budgetStore = useBudgetStore();
 
 const boardId = ref<string>(toBoardId(route.params));
 const categoryId = ref<string>(toCategoryId(route.params));
 
 async function getElement(categoryId: string): Promise<BoardCategory> {
-  const elements = await localDb.boardCategories.where('categoryId').equals(categoryId).toArray();
-  console.log('load ', categoryId, elements);
-  if (elements.length === 0) {
+  const element = budgetStore.findCategoryById(categoryId);
+  if (element === undefined) {
     throw Error(`Category ${categoryId} not found`);
   }
-  return elements[0];
+  return element;
 }
 
 const element = ref<BoardCategory>();

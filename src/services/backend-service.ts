@@ -60,7 +60,7 @@ export class AuthService {
     console.log('token refresh start');
     try {
       const newAuth = await this._oidcService.oidcRefresh();
-      console.log('token refresh done');
+      console.debug('token refresh done');
       this.setAuthenticated(newAuth);
       return newAuth;
     } catch (e) {

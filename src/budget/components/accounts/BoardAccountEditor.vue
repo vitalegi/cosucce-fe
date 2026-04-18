@@ -99,6 +99,9 @@ function init() {
   }
 }
 
-onMounted(() => init());
+onMounted(() => {
+  budgetStore.subscribeBoard(props.boardId);
+  init();
+});
 onUpdated(() => init());
 </script>

@@ -9,6 +9,7 @@ import routes from './routes';
 import { useMainLayoutStore } from 'src/stores/main-layout-store';
 import { toBoardId } from 'src/budget/util/budget-route-params-util';
 import { useWebsiteTreeStore } from 'src/stores/website-tree-store';
+import persistenceManager from 'src/persistence/persistence-manager';
 
 /*
  * If not building with SSR mode, you can
@@ -37,6 +38,8 @@ export default defineRouter(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to) => {
+    void persistenceManager.syncRemote();
+
     const mainLayoutStore = useMainLayoutStore();
     const boardId = toBoardId(to.params);
     if (boardId !== '') {
@@ -44,9 +47,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     } else {
       mainLayoutStore.disableBudget();
     }
-  });
 
-  Router.beforeEach((to) => {
     if (typeof to.meta.breadcrumbs === 'function') {
       const websiteTreeStore = useWebsiteTreeStore();
       websiteTreeStore.setPages(to.meta.breadcrumbs(to));

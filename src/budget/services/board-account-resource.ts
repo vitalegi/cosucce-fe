@@ -17,16 +17,25 @@ export default class BoardAccountResource {
   public async getAllVisible(allowSSORedirect: boolean = true): Promise<AxiosResponse> {
     return await this.api.get(`/budget/sync/account`, {}, allowSSORedirect);
   }
-  public async add(
-    boardId: string,
-    accountId: string,
-    label: string,
-    icon: string,
-    color: string,
-    enabled: boolean,
-    etag: string,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async add({
+    boardId,
+    accountId,
+    label,
+    icon,
+    color,
+    enabled,
+    newETag,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    accountId: string;
+    label: string;
+    icon: string;
+    color: string;
+    enabled: boolean;
+    newETag: string;
+    allowSSORedirect: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.post(
       `/budget/board/${boardId}/account`,
       {
@@ -35,23 +44,33 @@ export default class BoardAccountResource {
         icon: icon,
         color: color,
         enabled: enabled,
-        etag: etag,
+        etag: newETag,
       },
       {},
       allowSSORedirect,
     );
   }
-  public async update(
-    boardId: string,
-    accountId: string,
-    label: string,
-    icon: string,
-    color: string,
-    enabled: boolean,
-    newETag: string,
-    oldETag: string | undefined,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async update({
+    boardId,
+    accountId,
+    label,
+    icon,
+    color,
+    enabled,
+    newETag,
+    oldETag,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    accountId: string;
+    label: string;
+    icon: string;
+    color: string;
+    enabled: boolean;
+    newETag: string;
+    oldETag: string | undefined;
+    allowSSORedirect: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.put(
       `/budget/board/${boardId}/account`,
       {
@@ -70,11 +89,15 @@ export default class BoardAccountResource {
       allowSSORedirect,
     );
   }
-  public async delete(
-    boardId: string,
-    accountId: string,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async delete({
+    boardId,
+    accountId,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    accountId: string;
+    allowSSORedirect: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.delete(
       `/budget/board/${boardId}/account/${accountId}`,
       {},

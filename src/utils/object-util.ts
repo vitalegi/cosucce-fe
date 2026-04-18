@@ -1,4 +1,4 @@
-import NumberUtil from './number-util';
+import NumberUtil from 'src/utils/numbers/number-util';
 
 export default class ObjectUtil {
   public static isNullOrUndefined(o: unknown): boolean {

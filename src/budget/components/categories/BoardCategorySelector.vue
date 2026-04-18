@@ -2,7 +2,7 @@
   <q-select
     :label="label"
     outlined
-    :options="categories"
+    :options="sortedCategories"
     v-model="model"
     option-value="categoryId"
     option-label="label"
@@ -25,12 +25,11 @@
 </template>
 
 <script setup lang="ts">
-import { Subscription, liveQuery } from 'dexie';
 import { ValidationRule } from 'quasar';
 import BoardCategory from 'src/budget/models/board-category';
+import { useBudgetStore } from 'src/budget/stores/budget-store';
 import IconUtil from 'src/budget/util/icon-util';
-import localDb from 'src/persistence/local-db';
-import { computed, onMounted, onUnmounted, reactive } from 'vue';
+import { computed, onMounted } from 'vue';
 
 const model = defineModel<string>();
 
@@ -44,6 +43,8 @@ const props = withDefaults(defineProps<Props>(), {
   label: 'Categoria',
   rules: () => new Array<ValidationRule>(),
 });
+const budgetStore = useBudgetStore();
+onMounted(() => budgetStore.subscribeBoard(props.boardId));
 
 const validationRules = computed(() => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,23 +52,10 @@ const validationRules = computed(() => {
   return [mandatoryValue, ...props.rules];
 });
 
-const categories = computed((): Array<BoardCategory> => {
-  return entries.items
-    .filter((a) => a.enabled)
-    .sort((a, b) => (a.label.toLowerCase() >= b.label.toLowerCase() ? 1 : -1));
-});
-
-const entries = reactive({ items: new Array<BoardCategory>() });
-let subscription: Subscription | undefined;
-
-onMounted(() => {
-  subscription = liveQuery(() =>
-    localDb.boardCategories.where('boardId').equals(props.boardId).toArray(),
-  ).subscribe((elements) => (entries.items = elements));
-});
-
-onUnmounted(() => {
-  subscription?.unsubscribe();
-  subscription = undefined;
-});
+const sortedCategories = computed(
+  (): Array<BoardCategory> =>
+    budgetStore.categoriesAsList
+      .filter((a) => a.enabled)
+      .sort((a, b) => (a.label.toLowerCase() >= b.label.toLowerCase() ? 1 : -1)),
+);
 </script>

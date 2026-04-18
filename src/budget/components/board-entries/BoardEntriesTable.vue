@@ -4,7 +4,7 @@
     ref="table"
     class="col-12"
     style="max-width: 1200px"
-    :rows="entries.items"
+    :rows="budgetStore.entries"
     :columns="columns"
     row-key="entryId"
     :binary-state-sort="true"
@@ -34,19 +34,22 @@
   </q-table>
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref } from 'vue';
-import { Subscription, liveQuery } from 'dexie';
-import localDb from 'src/persistence/local-db';
+import { onMounted, onUpdated, ref } from 'vue';
 import { QTableColumn } from 'quasar';
 import DateUtil from 'src/utils/date-util';
 import BoardCard from 'src/budget/components/boards/BoardCard.vue';
 import BoardEntry from 'src/budget/models/board-entry';
+import { useBudgetStore } from 'src/budget/stores/budget-store';
 
 interface Props {
   boardId: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {});
+
+const budgetStore = useBudgetStore();
+onMounted(() => budgetStore.subscribeBoard(props.boardId));
+onUpdated(() => budgetStore.subscribeBoard(props.boardId));
 
 const loading = ref(false);
 const search = ref('');
@@ -123,17 +126,4 @@ const columns: QTableColumn[] = [
 function onRowClick(evt: Event, row: any, index: number): void {
   emits('update', row.entryId);
 }
-const entries = reactive({ items: new Array<BoardEntry>() });
-let subscription: Subscription | undefined;
-
-onMounted(() => {
-  subscription = liveQuery(() =>
-    localDb.boardEntries.where('boardId').equals(props.boardId).toArray(),
-  ).subscribe((elements) => (entries.items = elements));
-});
-
-onUnmounted(() => {
-  subscription?.unsubscribe();
-  subscription = undefined;
-});
 </script>

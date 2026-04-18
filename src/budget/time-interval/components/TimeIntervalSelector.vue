@@ -2,7 +2,7 @@
   <q-btn
     class="time-interval"
     color="primary"
-    :outline="!budgetIntervalStore.todayIsInRange"
+    :outline="budgetIntervalStore.todayIsInRange"
     label="Today"
     @click="now()"
   />

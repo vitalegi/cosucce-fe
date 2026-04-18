@@ -14,29 +14,28 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import budgetSyncService from 'src/budget/services/budget-sync';
 import { useRoute, useRouter } from 'vue-router';
 import { toAccountId, toBoardId } from 'src/budget/util/budget-route-params-util';
 import BoardAccountEditor from 'src/budget/components/accounts/BoardAccountEditor.vue';
 import routing from 'src/router/routing';
 import BoardAccount from '../models/board-account';
-import localDb from 'src/persistence/local-db';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
+import { useBudgetStore } from 'src/budget/stores/budget-store';
 
 const route = useRoute();
 const router = useRouter();
-void budgetSyncService.synchronize();
+
+const budgetStore = useBudgetStore();
 
 const boardId = ref<string>(toBoardId(route.params));
 const accountId = ref<string>(toAccountId(route.params));
 
 async function getElement(accountId: string): Promise<BoardAccount> {
-  const elements = await localDb.boardAccounts.where('accountId').equals(accountId).toArray();
-  console.log('load ', accountId, elements);
-  if (elements.length === 0) {
+  const element = budgetStore.findAccountById(accountId);
+  if (element === undefined) {
     throw Error(`Account ${accountId} not found`);
   }
-  return elements[0];
+  return element;
 }
 
 const element = ref<BoardAccount>();

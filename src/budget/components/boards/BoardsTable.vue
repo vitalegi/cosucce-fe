@@ -160,8 +160,8 @@ function filterElement(b: Board): boolean {
 
 onMounted(() => {
   loading.value = true;
-  elementsSubscription = liveQuery(() => localDb.boards.toArray()).subscribe((e) => {
-    elements.items = e;
+  elementsSubscription = liveQuery(() => localDb.boards.toArray()).subscribe((newElements) => {
+    elements.items = newElements.map((e) => Board.fromJson(e));
     updateData(pagination.value);
     loading.value = false;
   });

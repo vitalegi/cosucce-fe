@@ -1,24 +1,25 @@
 import Dexie, { EntityTable, Table } from 'dexie';
-import Board from 'src/budget/models/board';
 import Changelog from 'src/models/changelog';
-import BoardEntry from 'src/budget/models/board-entry';
-import BoardAccount from 'src/budget/models/board-account';
-import BoardCategory from 'src/budget/models/board-category';
+import BoardEntryDto from 'src/budget/models/board-entry-dto';
+import BoardAccountDto from 'src/budget/models/board-account-dto';
+import BoardCategoryDto from 'src/budget/models/board-category-dto';
+import BoardDto from 'src/budget/models/board-dto';
 
 const localDb = new Dexie('cosucce') as Dexie & {
   changelogs: Table<Changelog, number>;
-  boards: EntityTable<Board, 'boardId'>;
-  boardEntries: EntityTable<BoardEntry, 'entryId'>;
-  boardAccounts: EntityTable<BoardAccount, 'accountId'>;
-  boardCategories: EntityTable<BoardCategory, 'categoryId'>;
+  boards: EntityTable<BoardDto, 'boardId'>;
+  boardEntries: EntityTable<BoardEntryDto, 'entryId'>;
+  boardAccounts: EntityTable<BoardAccountDto, 'accountId'>;
+  boardCategories: EntityTable<BoardCategoryDto, 'categoryId'>;
 };
 localDb.version(1).stores({
   changelogs: '++changelogId, entityType, action, entityId, status, creationDate, lastUpdate',
   boards: '&boardId, name, creationDate, lastUpdate',
   boardEntries:
     '&entryId, boardId, accountId, categoryId, description, amount, creationDate, lastUpdate',
-  boardAccounts: '&accountId, boardId, label, icon, enabled, creationDate, lastUpdate',
-  boardCategories: '&categoryId, boardId, label, icon, enabled, creationDate, lastUpdate',
+  boardAccounts: '&accountId, boardId, label, icon, color, enabled, creationDate, lastUpdate',
+  boardCategories:
+    '&categoryId, boardId, label, icon, color, type, enabled, creationDate, lastUpdate',
 });
 
 export default localDb;

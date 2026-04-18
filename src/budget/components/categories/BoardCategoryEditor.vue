@@ -20,12 +20,6 @@
         @click="editor.type = 'CREDIT'"
       />
     </q-btn-group>
-    <q-input
-      outlined
-      v-model="editor.type"
-      label="Type"
-      :rules="[(v) => v.trim() !== '' || 'La label è obbligatoria']"
-    />
     <IconSelector v-model="editor.icon" />
     <q-checkbox outlined v-model="editor.enabled" label="Enabled" />
 

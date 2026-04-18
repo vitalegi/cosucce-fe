@@ -17,17 +17,27 @@ export default class BoardEntryResource {
   public async getAllVisible(allowSSORedirect: boolean = true): Promise<AxiosResponse> {
     return await this.api.get(`/budget/sync/entry`, {}, allowSSORedirect);
   }
-  public async add(
-    boardId: string,
-    entryId: string,
-    date: string,
-    accountId: string,
-    categoryId: string,
-    description: string,
-    amount: string,
-    etag: string,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async add({
+    boardId,
+    entryId,
+    date,
+    accountId,
+    categoryId,
+    description,
+    amount,
+    newETag,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    entryId: string;
+    date: string;
+    accountId: string;
+    categoryId: string;
+    description: string;
+    amount: string;
+    newETag: string;
+    allowSSORedirect?: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.post(
       `/budget/board/${boardId}/entry`,
       {
@@ -37,24 +47,35 @@ export default class BoardEntryResource {
         categoryId: categoryId,
         description: description,
         amount: amount,
-        etag: etag,
+        etag: newETag,
       },
       {},
       allowSSORedirect,
     );
   }
-  public async update(
-    boardId: string,
-    entryId: string,
-    date: string,
-    accountId: string,
-    categoryId: string,
-    description: string,
-    amount: string,
-    newETag: string,
-    oldETag: string | undefined,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async update({
+    boardId,
+    entryId,
+    date,
+    accountId,
+    categoryId,
+    description,
+    amount,
+    newETag,
+    oldETag,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    entryId: string;
+    date: string;
+    accountId: string;
+    categoryId: string;
+    description: string;
+    amount: string;
+    newETag: string;
+    oldETag: string;
+    allowSSORedirect?: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.put(
       `/budget/board/${boardId}/entry`,
       {

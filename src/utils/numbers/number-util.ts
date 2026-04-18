@@ -1,5 +1,6 @@
 import bigDecimal from 'js-big-decimal';
-import ObjectUtil from './object-util';
+import { SafeBigDecimal } from 'src/utils/numbers/safe-big-decimal';
+import ObjectUtil from 'src/utils/object-util';
 
 export default class NumberUtil {
   public static formatInt(n: number): string {
@@ -52,9 +53,20 @@ export default class NumberUtil {
       }).format(value * 100) + '%'
     );
   }
-  public static formatBigDecimal(value: string): string {
-    return new bigDecimal(value.replace(',', '.'))
-      .stripTrailingZero()
-      .getPrettyValue(undefined, '');
+  public static formatBigDecimal(value: string | SafeBigDecimal): string {
+    let v: SafeBigDecimal;
+    if (typeof value === 'string') {
+      v = NumberUtil.toSafeBigDecimal(value);
+    } else {
+      v = value;
+    }
+    return v.getPrettyValue(undefined, '');
+  }
+
+  public static toSafeBigDecimal(value: string): SafeBigDecimal {
+    return NumberUtil.toBigDecimal(value);
+  }
+  public static toBigDecimal(value: string): bigDecimal {
+    return new bigDecimal(value.replace(',', '.')).stripTrailingZero();
   }
 }

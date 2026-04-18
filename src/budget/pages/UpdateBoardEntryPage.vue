@@ -8,7 +8,8 @@
       :accountId="element?.accountId || ''"
       :categoryId="element?.categoryId || ''"
       :description="element?.description || ''"
-      :amount="element?.amount || ''"
+      :amount="element?.amount || new bigDecimal('0')"
+      :creationDate="element?.creationDate || new Date()"
       @save="save"
     />
   </q-page>
@@ -16,7 +17,6 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import budgetSyncService from 'src/budget/services/budget-sync';
 import { useRoute, useRouter } from 'vue-router';
 import { toBoardId, toEntryId } from 'src/budget/util/budget-route-params-util';
 import routing from 'src/router/routing';
@@ -24,10 +24,10 @@ import localDb from 'src/persistence/local-db';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 import BoardEntryEditor from 'src/budget/components/board-entries/BoardEntryEditor.vue';
 import BoardEntry from 'src/budget/models/board-entry';
+import bigDecimal from 'js-big-decimal';
 
 const route = useRoute();
 const router = useRouter();
-void budgetSyncService.synchronize();
 
 const boardId = ref<string>(toBoardId(route.params));
 const entryId = ref<string>(toEntryId(route.params));
@@ -38,7 +38,7 @@ async function getElement(entryId: string): Promise<BoardEntry> {
   if (elements.length === 0) {
     throw Error(`Entry ${entryId} not found`);
   }
-  return elements[0];
+  return BoardEntry.fromJson(elements[0]);
 }
 
 const element = ref<BoardEntry>();

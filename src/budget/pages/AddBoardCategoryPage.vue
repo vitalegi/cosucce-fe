@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import budgetSyncService from 'src/budget/services/budget-sync';
 import { useRoute, useRouter } from 'vue-router';
 import { toBoardId } from 'src/budget/util/budget-route-params-util';
 import routing from 'src/router/routing';
@@ -26,7 +25,6 @@ import BoardCategoryEditor from 'src/budget/components/categories/BoardCategoryE
 
 const route = useRoute();
 const router = useRouter();
-void budgetSyncService.synchronize();
 
 const boardId = ref<string>(toBoardId(route.params));
 

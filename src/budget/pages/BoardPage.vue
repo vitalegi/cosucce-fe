@@ -31,6 +31,7 @@
               <SpanSelector class="q-mx-auto" />
             </q-tab-panel>
             <q-tab-panel name="entries" class="row">
+              <BoardEntriesByCategories :board-id="boardId" />
               <BoardEntriesTable
                 :board-id="boardId"
                 @add="addBoardEntry"
@@ -60,6 +61,7 @@ import routing from 'src/router/routing';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 import TimeIntervalSlideItem from 'src/budget/time-interval/components/TimeIntervalSlideItem.vue';
 import SpanSelector from 'src/budget/components/commons/SpanSelector.vue';
+import BoardEntriesByCategories from 'src/budget/components/board-entries/BoardEntriesByCategories.vue';
 
 const route = useRoute();
 const router = useRouter();

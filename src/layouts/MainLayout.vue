@@ -134,5 +134,6 @@ function settingsCategories(): Promise<unknown> {
   return routing.budget().settingsViewCategories(router, mainLayoutStore.boardId);
 }
 
-void authService.tokenRefresh();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+void authService.tokenRefresh().catch((e) => {});
 </script>

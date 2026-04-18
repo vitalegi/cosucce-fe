@@ -18,17 +18,27 @@ export default class BoardCategoryResource {
   public async getAllVisible(allowSSORedirect: boolean = true): Promise<AxiosResponse> {
     return await this.api.get(`/budget/sync/category`, {}, allowSSORedirect);
   }
-  public async add(
-    boardId: string,
-    categoryId: string,
-    label: string,
-    type: BoardCategoryType,
-    icon: string,
-    color: string,
-    enabled: boolean,
-    etag: string,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async add({
+    boardId,
+    categoryId,
+    label,
+    type,
+    icon,
+    color,
+    enabled,
+    newETag,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    categoryId: string;
+    label: string;
+    type: BoardCategoryType;
+    icon: string;
+    color: string;
+    enabled: boolean;
+    newETag: string;
+    allowSSORedirect: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.post(
       `/budget/board/${boardId}/category`,
       {
@@ -38,24 +48,35 @@ export default class BoardCategoryResource {
         icon: icon,
         color: color,
         enabled: enabled,
-        etag: etag,
+        etag: newETag,
       },
       {},
       allowSSORedirect,
     );
   }
-  public async update(
-    boardId: string,
-    categoryId: string,
-    label: string,
-    type: BoardCategoryType,
-    icon: string,
-    color: string,
-    enabled: boolean,
-    newETag: string,
-    oldETag: string | undefined,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async update({
+    boardId,
+    categoryId,
+    label,
+    type,
+    icon,
+    color,
+    enabled,
+    newETag,
+    oldETag,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    categoryId: string;
+    label: string;
+    type: BoardCategoryType;
+    icon: string;
+    color: string;
+    enabled: boolean;
+    newETag: string;
+    oldETag: string;
+    allowSSORedirect: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.put(
       `/budget/board/${boardId}/category`,
       {
@@ -75,11 +96,15 @@ export default class BoardCategoryResource {
       allowSSORedirect,
     );
   }
-  public async delete(
-    boardId: string,
-    categoryId: string,
-    allowSSORedirect: boolean = true,
-  ): Promise<AxiosResponse> {
+  public async delete({
+    boardId,
+    categoryId,
+    allowSSORedirect = true,
+  }: {
+    boardId: string;
+    categoryId: string;
+    allowSSORedirect: boolean;
+  }): Promise<AxiosResponse> {
     return await this.api.delete(
       `/budget/board/${boardId}/category/${categoryId}`,
       {},
