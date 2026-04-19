@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BudgetBreadcrumbs } from 'src/budget/router/budget-breadcrumbs';
+import { toCategoryType } from 'src/budget/util/budget-route-params-util';
 import Breadcrumb from 'src/commons/model/breadcrumb';
 import { castParamToString } from 'src/utils/params-util';
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
@@ -56,16 +57,17 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'budget/board/:boardId/add-entry',
+        path: 'budget/board/:boardId/add-entry/:categoryType',
         component: () => import('/src/budget/pages/AddBoardEntryPage.vue'),
         meta: {
           breadcrumbs: (route: RouteLocationNormalized) => {
             const boardId = castParamToString(route.params.boardId);
+            const categoryType = toCategoryType(route.params);
             return [
               home(),
               BudgetBreadcrumbs.viewBoards(),
               BudgetBreadcrumbs.viewBoard(boardId),
-              BudgetBreadcrumbs.addBoardEntry(boardId, false),
+              BudgetBreadcrumbs.addBoardEntry(boardId, categoryType, false),
             ];
           },
         },

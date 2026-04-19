@@ -32,11 +32,6 @@
             </q-tab-panel>
             <q-tab-panel name="entries" class="row">
               <BoardEntriesByCategories :board-id="boardId" />
-              <BoardEntriesTable
-                :board-id="boardId"
-                @add="addBoardEntry"
-                @update="updateBoardEntry"
-              />
             </q-tab-panel>
             <q-tab-panel name="pie"> </q-tab-panel>
             <q-tab-panel name="credits" class="row">
@@ -49,6 +44,10 @@
         </div>
       </div>
     </div>
+    <div class="fixed-bottom full-width text-center q-my-sm q-gutter-sm">
+      <q-btn size="40px" round outline icon="remove" class="big-button debit" @click="addDebit()" />
+      <q-btn size="40px" round outline icon="add" class="big-button credit" @click="addCredit()" />
+    </div>
   </q-page>
 </template>
 
@@ -56,7 +55,6 @@
 import { useRoute, useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
 import { toBoardId } from 'src/budget/util/budget-route-params-util';
-import BoardEntriesTable from 'src/budget/components/board-entries/BoardEntriesTable.vue';
 import routing from 'src/router/routing';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 import TimeIntervalSlideItem from 'src/budget/time-interval/components/TimeIntervalSlideItem.vue';
@@ -69,13 +67,20 @@ const router = useRouter();
 const boardId = ref<string>(toBoardId(route.params));
 const chartTab = ref('balance');
 
-function addBoardEntry(): Promise<unknown> {
-  return routing.budget().addBoardEntry(router, boardId.value);
-}
-
+/*
 function updateBoardEntry(entryId: string): Promise<unknown> {
   return routing.budget().editBoardEntry(router, boardId.value, entryId);
 }
+*/
+
+function addCredit(): Promise<unknown> {
+  return routing.budget().addBoardEntry(router, boardId.value, 'CREDIT');
+}
+
+function addDebit(): Promise<unknown> {
+  return routing.budget().addBoardEntry(router, boardId.value, 'DEBIT');
+}
+
 watch(
   () => route.params,
   (newParams) => {
@@ -90,5 +95,12 @@ watch(
 
 .q-tab-panels {
   background-color: transparent;
+}
+
+.big-button.debit {
+  color: $debit;
+}
+.big-button.credit {
+  color: $credit;
 }
 </style>

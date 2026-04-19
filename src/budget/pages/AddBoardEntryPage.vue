@@ -3,6 +3,7 @@
     <CommonBreadcrumbs />
     <BoardEntryEditor
       :boardId="boardId"
+      :categoryType="categoryType"
       date=""
       accountId=""
       categoryId=""
@@ -18,10 +19,11 @@
 import { ref, watch } from 'vue';
 import BoardEntryEditor from 'src/budget/components/board-entries/BoardEntryEditor.vue';
 import { useRoute, useRouter } from 'vue-router';
-import { toBoardId } from 'src/budget/util/budget-route-params-util';
+import { toBoardId, toCategoryType } from 'src/budget/util/budget-route-params-util';
 import routing from 'src/router/routing';
 import CommonBreadcrumbs from 'src/commons/components/CommonBreadcrumbs.vue';
 import bigDecimal from 'js-big-decimal';
+import BoardCategoryType from 'src/budget/models/board-category-type';
 
 const route = useRoute();
 const router = useRouter();
@@ -30,6 +32,7 @@ async function save(): Promise<void> {
   await routing.budget().viewBoard(router, boardId.value);
 }
 const boardId = ref<string>(toBoardId(route.params));
+const categoryType = ref<BoardCategoryType>(toCategoryType(route.params));
 
 watch(
   () => route.params,

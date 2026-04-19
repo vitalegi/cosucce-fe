@@ -2,7 +2,12 @@
   <q-form class="col-12 q-gutter-y-md" style="max-width: 600px" greedy @submit="submit()">
     <DateSelector outlined v-model="editor.date" :mask="DateUtil.Q_DATE_MASK" label="Date" />
     <BoardAccountSelector :board-id="boardId" label="Account" v-model="editor.accountId" />
-    <BoardCategorySelector :board-id="boardId" label="Categoria" v-model="editor.categoryId" />
+    <BoardCategorySelector
+      :board-id="boardId"
+      :category-type="categoryType"
+      label="Categoria"
+      v-model="editor.categoryId"
+    />
     <q-input outlined v-model="editor.description" label="Description" />
     <AmountSelector v-model="editor.amount" label="Importo" />
     <q-btn class="full-width" size="xl" type="submit" color="primary">{{ submitLabel }}</q-btn>
@@ -19,11 +24,13 @@ import BoardCategorySelector from 'src/budget/components/categories/BoardCategor
 import AmountSelector from 'src/budget/components/board-entries/AmountSelector.vue';
 import { SafeBigDecimal } from 'src/utils/numbers/safe-big-decimal';
 import NumberUtil from 'src/utils/numbers/number-util';
+import BoardCategoryType from 'src/budget/models/board-category-type';
 
 const emit = defineEmits(['save']);
 
 interface Props {
   id?: string;
+  categoryType: BoardCategoryType;
   boardId: string;
   date: string;
   accountId: string;

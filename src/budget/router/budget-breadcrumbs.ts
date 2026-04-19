@@ -1,5 +1,6 @@
 import Breadcrumb from 'src/commons/model/breadcrumb';
 import { BudgetPaths } from 'src/budget/router/budget-routing';
+import BoardCategoryType from 'src/budget/models/board-category-type';
 
 export class BudgetBreadcrumbs {
   public static viewBoards(link: boolean = true): Breadcrumb {
@@ -11,8 +12,22 @@ export class BudgetBreadcrumbs {
   public static viewBoard(boardId: string, link: boolean = true): Breadcrumb {
     return { label: 'Board', to: link ? BudgetPaths.viewBoard(boardId) : undefined };
   }
-  public static addBoardEntry(boardId: string, link: boolean = true): Breadcrumb {
-    return { label: 'Add', to: link ? BudgetPaths.addBoardEntry(boardId) : undefined };
+  public static addBoardEntry(
+    boardId: string,
+    categoryType: BoardCategoryType,
+    link: boolean = true,
+  ): Breadcrumb {
+    let label = '';
+    if (categoryType === 'CREDIT') {
+      label = 'Add Credit';
+    }
+    if (categoryType === 'DEBIT') {
+      label = 'Add Debit';
+    }
+    return {
+      label: label,
+      to: link ? BudgetPaths.addBoardEntry(boardId, categoryType) : undefined,
+    };
   }
   public static updateBoardEntry(
     boardId: string,

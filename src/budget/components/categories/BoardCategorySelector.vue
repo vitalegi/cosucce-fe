@@ -27,14 +27,16 @@
 <script setup lang="ts">
 import { ValidationRule } from 'quasar';
 import BoardCategory from 'src/budget/models/board-category';
+import BoardCategoryType from 'src/budget/models/board-category-type';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
 import IconUtil from 'src/budget/util/icon-util';
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 
 const model = defineModel<string>();
 
 interface Props {
   boardId: string;
+  categoryType: BoardCategoryType;
   label?: string;
   rules?: ValidationRule[];
 }
@@ -44,7 +46,6 @@ const props = withDefaults(defineProps<Props>(), {
   rules: () => new Array<ValidationRule>(),
 });
 const budgetStore = useBudgetStore();
-onMounted(() => budgetStore.subscribeBoard(props.boardId));
 
 const validationRules = computed(() => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +57,7 @@ const sortedCategories = computed(
   (): Array<BoardCategory> =>
     budgetStore.categoriesAsList
       .filter((a) => a.enabled)
+      .filter((a) => a.type === props.categoryType)
       .sort((a, b) => (a.label.toLowerCase() >= b.label.toLowerCase() ? 1 : -1)),
 );
 </script>

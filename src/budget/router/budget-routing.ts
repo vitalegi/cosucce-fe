@@ -1,3 +1,4 @@
+import BoardCategoryType from 'src/budget/models/board-category-type';
 import { NavigationFailure, Router } from 'vue-router';
 
 function push(router: Router, path: string): Promise<NavigationFailure | void | undefined> {
@@ -16,8 +17,8 @@ export class BudgetPaths {
   public static viewBoard(boardId: string): string {
     return `/budget/board/${boardId}`;
   }
-  public static addBoardEntry(boardId: string): string {
-    return `/budget/board/${boardId}/add-entry`;
+  public static addBoardEntry(boardId: string, categoryType: BoardCategoryType): string {
+    return `/budget/board/${boardId}/add-entry/${categoryType.toLowerCase()}`;
   }
   public static editBoardEntry(boardId: string, entryId: string): string {
     return `/budget/board/${boardId}/entry/${entryId}`;
@@ -55,8 +56,9 @@ export class BudgetRouting {
   public addBoardEntry(
     router: Router,
     boardId: string,
+    categoryType: BoardCategoryType,
   ): Promise<NavigationFailure | void | undefined> {
-    return push(router, BudgetPaths.addBoardEntry(boardId));
+    return push(router, BudgetPaths.addBoardEntry(boardId, categoryType));
   }
   public editBoardEntry(
     router: Router,
