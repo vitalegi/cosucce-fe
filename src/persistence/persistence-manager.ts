@@ -22,6 +22,7 @@ import { BoardDeletePersistence } from 'src/persistence/impl/board-persistence-d
 import { BoardUpdatePersistence } from 'src/persistence/impl/board-persistence-update';
 import ObjectUtil from 'src/utils/object-util';
 import { useUserStore } from 'src/stores/user-store';
+import { date } from 'quasar';
 
 type Persistence = {
   action: Action;
@@ -86,6 +87,17 @@ export class PersistenceManager {
       }
       this.pushChangelogs();
 
+      const lastRemoteSync = window.localStorage.getItem('last_remote_sync');
+      if (lastRemoteSync != null) {
+        const lastRemoteSyncDate = new Date(Date.parse(lastRemoteSync));
+        const ref = new Date();
+        const diff = date.getDateDiff(ref, lastRemoteSyncDate, 'minutes');
+        if (diff < 5) {
+          return;
+        }
+      }
+      window.localStorage.setItem('last_remote_sync', new Date().toISOString());
+
       console.debug('synchronize start');
       const start = TimeUtil.ts();
       for (const synchronizer of this.synchronizers) {
@@ -104,8 +116,8 @@ export class PersistenceManager {
   protected async pushChangelogs(): Promise<void> {
     const start = TimeUtil.ts();
     const changes = (await localDb.changelogs.toArray())
-      .sort((a, b) => Changelog.sortById(a, b))
-      .filter((e) => e.status !== 'done');
+      .filter((e) => e.status !== 'done')
+      .sort((a, b) => Changelog.sortById(a, b));
     console.log(`Found ${changes.length} changeset to sync - ${TimeUtil.ts() - start}ms`);
 
     try {
@@ -125,6 +137,20 @@ export class PersistenceManager {
     if (changelog.changelogId === undefined) {
       throw Error(`Missing changelogId on ${Changelog.toString(changelog)}`);
     }
+    if (changelog.dependsOn.length > 0) {
+      const dependencies = (await localDb.changelogs
+        .where('entityId')
+        .anyOfIgnoreCase(changelog.dependsOn)
+        .toArray()) as Changelog[];
+      for (const dependency of dependencies) {
+        if (dependency.status !== 'done' && dependency.changelogId < changelog.changelogId) {
+          console.log(
+            `Changelog ${Changelog.toString(changelog)} depends on ${Changelog.toString(dependency)}, wait completion`,
+          );
+          return 'new';
+        }
+      }
+    }
     try {
       const engine = this.getPersistor(changelog.action, changelog.entityType);
       await engine.executeRemote(changelog, false);
@@ -133,6 +159,9 @@ export class PersistenceManager {
       return 'done';
     } catch (e) {
       const code = this.getErrorCode(e);
+      if (code !== 'unauthorized') {
+        console.error(`Error while pushing to remote: ${Changelog.toString(changelog)}`, e);
+      }
       await localDb.changelogs.update(changelog.changelogId, {
         status: code,
         lastUpdate: new Date(),

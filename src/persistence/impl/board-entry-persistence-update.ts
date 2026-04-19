@@ -36,6 +36,7 @@ export class BoardEntryUpdatePersistence implements EntityLocalPersistence {
       entityType: this.entityType,
       entity: entity,
       entityId: entity.entryId,
+      dependsOn: [e.entryId, e.accountId, e.categoryId],
       oldETag: existingEntry.etag,
       newETag: UuidUtil.uuid(),
     });

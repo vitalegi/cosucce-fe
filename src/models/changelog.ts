@@ -12,7 +12,7 @@ export type ChangelogStatus =
 export type EntityType = 'board' | 'board-entry' | 'board-account' | 'board-category';
 
 export default class Changelog {
-  changelogId?: number;
+  changelogId!: number;
   entityId = '';
   action: Action = 'add';
   entityType: EntityType = 'board';
@@ -20,6 +20,7 @@ export default class Changelog {
   payload: any = {};
   oldETag: string | undefined;
   newETag: string | undefined;
+  dependsOn = new Array<string>();
   status: ChangelogStatus = 'new';
   creationDate = new Date();
   lastUpdate = new Date();

@@ -25,6 +25,7 @@ export class BoardEntryDeletePersistence implements EntityLocalPersistence {
       entityType: this.entityType,
       entity: existingEntry,
       entityId: e.entryId,
+      dependsOn: [],
       oldETag: existingEntry.etag,
       newETag: undefined,
     });

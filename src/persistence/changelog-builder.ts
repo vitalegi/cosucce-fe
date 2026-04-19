@@ -5,6 +5,7 @@ export interface ChangelogRequest {
   entityType: EntityType;
   entity: unknown;
   entityId: string;
+  dependsOn: string[];
   oldETag: string | undefined;
   newETag: string | undefined;
 }
@@ -15,6 +16,7 @@ export class ChangelogBuilder {
     entityType,
     entity,
     entityId,
+    dependsOn,
     oldETag,
     newETag,
   }: ChangelogRequest): Changelog {
@@ -24,6 +26,7 @@ export class ChangelogBuilder {
     changelog.entityType = entityType;
     changelog.oldETag = oldETag;
     changelog.newETag = newETag;
+    changelog.dependsOn = dependsOn;
     changelog.payload = entity;
     changelog.status = 'new';
     changelog.creationDate = new Date();

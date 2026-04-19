@@ -25,6 +25,7 @@ export class BoardAccountDeletePersistence implements EntityLocalPersistence {
       entityType: this.entityType,
       entity: existingAccount,
       entityId: e.accountId,
+      dependsOn: [],
       oldETag: existingAccount.etag,
       newETag: undefined,
     });

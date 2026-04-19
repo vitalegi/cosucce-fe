@@ -25,6 +25,7 @@ export class BoardCategoryDeletePersistence implements EntityLocalPersistence {
       entityType: this.entityType,
       entity: existingCategory,
       entityId: e.categoryId,
+      dependsOn: [],
       oldETag: existingCategory.etag,
       newETag: undefined,
     });
