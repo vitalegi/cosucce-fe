@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import BoardEntry from 'src/budget/models/board-entry';
 import BoardAccount from 'src/budget/models/board-account';
-import BoardCategory, { BoardCategoryType } from 'src/budget/models/board-category';
+import BoardCategory from 'src/budget/models/board-category';
 import localDb from 'src/persistence/local-db';
 import { SafeBigDecimal } from 'src/utils/numbers/safe-big-decimal';
 import { liveQuery, Subscription } from 'dexie';
@@ -10,30 +10,15 @@ import { AddBoardEntry } from 'src/persistence/impl/board-entry-persistence-add'
 import { UpdateBoardEntry } from 'src/persistence/impl/board-entry-persistence-update';
 import { PersistenceManager } from 'src/persistence/persistence-manager';
 import { DeleteBoardEntry } from 'src/persistence/impl/board-entry-persistence-delete';
-
-type BoardElement = {
-  boardId: string;
-  name: string;
-};
-
-type BoardAccountElement = {
-  accountId: string;
-  boardId: string;
-  label: string;
-  icon: string;
-  color: string;
-  enabled: boolean;
-};
-
-type BoardCategoryElement = {
-  categoryId: string;
-  boardId: string;
-  label: string;
-  type: BoardCategoryType;
-  icon: string;
-  color: string;
-  enabled: boolean;
-};
+import { AddBoard } from 'src/persistence/impl/board-persistence-add';
+import { UpdateBoard } from 'src/persistence/impl/board-persistence-update';
+import { DeleteBoard } from 'src/persistence/impl/board-persistence-delete';
+import { AddBoardAccount } from 'src/persistence/impl/board-account-persistence-add';
+import { UpdateBoardAccount } from 'src/persistence/impl/board-account-persistence-update';
+import { DeleteBoardAccount } from 'src/persistence/impl/board-account-persistence-delete';
+import { AddBoardCategory } from 'src/persistence/impl/board-category-persistence-add';
+import { UpdateBoardCategory } from 'src/persistence/impl/board-category-persistence-update';
+import { DeleteBoardCategory } from 'src/persistence/impl/board-category-persistence-delete';
 
 type BoardEntryFilter = {
   categoryId?: string;
@@ -131,13 +116,13 @@ export const useBudgetStore = defineStore('budget', {
       this.currentBoardId = null;
     },
 
-    async addBoard(data: BoardElement): Promise<string> {
+    async addBoard(data: AddBoard): Promise<string> {
       return await this.persistenceManager.add('add', 'board', data);
     },
-    async updateBoard(data: BoardElement): Promise<string> {
+    async updateBoard(data: UpdateBoard): Promise<string> {
       return await this.persistenceManager.add('update', 'board', data);
     },
-    async deleteBoard(data: BoardElement): Promise<string> {
+    async deleteBoard(data: DeleteBoard): Promise<string> {
       return await this.persistenceManager.add('delete', 'board', data);
     },
 
@@ -151,23 +136,23 @@ export const useBudgetStore = defineStore('budget', {
       return await this.persistenceManager.add('delete', 'board-entry', data);
     },
 
-    async addBoardAccount(data: BoardAccountElement): Promise<string> {
+    async addBoardAccount(data: AddBoardAccount): Promise<string> {
       return await this.persistenceManager.add('add', 'board-account', data);
     },
-    async updateBoardAccount(data: BoardAccountElement): Promise<string> {
+    async updateBoardAccount(data: UpdateBoardAccount): Promise<string> {
       return await this.persistenceManager.add('update', 'board-account', data);
     },
-    async deleteBoardAccount(data: BoardAccountElement): Promise<string> {
+    async deleteBoardAccount(data: DeleteBoardAccount): Promise<string> {
       return await this.persistenceManager.add('delete', 'board-account', data);
     },
 
-    async addBoardCategory(data: BoardCategoryElement): Promise<string> {
+    async addBoardCategory(data: AddBoardCategory): Promise<string> {
       return await this.persistenceManager.add('add', 'board-category', data);
     },
-    async updateBoardCategory(data: BoardCategoryElement): Promise<string> {
+    async updateBoardCategory(data: UpdateBoardCategory): Promise<string> {
       return await this.persistenceManager.add('update', 'board-category', data);
     },
-    async deleteBoardCategory(data: BoardCategoryElement): Promise<string> {
+    async deleteBoardCategory(data: DeleteBoardCategory): Promise<string> {
       return await this.persistenceManager.add('delete', 'board-category', data);
     },
   },

@@ -1,6 +1,6 @@
 import { AxiosWrapperAuth } from 'src/services/authenticated-axios';
 import { AxiosResponse } from 'axios';
-import { BoardCategoryType } from 'src/budget/models/board-category';
+import BoardCategoryType from 'src/budget/models/board-category-type';
 
 export default class BoardCategoryResource {
   api;

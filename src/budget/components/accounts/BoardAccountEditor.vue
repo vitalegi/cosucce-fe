@@ -14,7 +14,6 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, onUpdated, ref } from 'vue';
-import UuidUtil from 'src/utils/uuid-util';
 import { useBudgetStore } from 'src/budget/stores/budget-store';
 import IconSelector from 'src/budget/components/commons/IconSelector.vue';
 import IconUtil from 'src/budget/util/icon-util';
@@ -53,18 +52,14 @@ const submitLabel = computed(() => {
 
 async function submit(): Promise<void> {
   if (addMode.value) {
-    const id = UuidUtil.uuid();
     await budgetStore.addBoardAccount({
-      accountId: id,
       boardId: props.boardId,
       label: editor.value.label.trim(),
       icon: editor.value.icon,
       color: IconUtil.getIcon(editor.value.icon).color,
       enabled: editor.value.enabled,
     });
-    emit('save', {
-      id: id,
-    });
+    emit('save', {});
   } else {
     if (props.id === undefined) {
       throw Error('id is undefined, code should be unreachable');
@@ -77,9 +72,7 @@ async function submit(): Promise<void> {
       color: IconUtil.getIcon(editor.value.icon).color,
       enabled: editor.value.enabled,
     });
-    emit('save', {
-      id: props.id,
-    });
+    emit('save', {});
   }
 }
 

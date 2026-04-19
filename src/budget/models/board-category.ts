@@ -1,6 +1,5 @@
+import BoardCategoryType from 'src/budget/models/board-category-type';
 import ObjectUtil from 'src/utils/object-util';
-
-export type BoardCategoryType = 'CREDIT' | 'DEBIT';
 
 export default class BoardCategory {
   categoryId = '';

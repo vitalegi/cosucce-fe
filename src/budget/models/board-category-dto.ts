@@ -1,4 +1,5 @@
-import BoardCategory, { BoardCategoryType } from 'src/budget/models/board-category';
+import BoardCategory from 'src/budget/models/board-category';
+import BoardCategoryType from 'src/budget/models/board-category-type';
 
 export default class BoardCategoryDto {
   categoryId = '';

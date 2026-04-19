@@ -1,5 +1,5 @@
-import { BoardCategoryType } from 'src/budget/models/board-category';
 import BoardCategoryDto from 'src/budget/models/board-category-dto';
+import BoardCategoryType from 'src/budget/models/board-category-type';
 import Changelog, { Action, EntityType } from 'src/models/changelog';
 import { ChangelogBuilder } from 'src/persistence/changelog-builder';
 import EntityLocalPersistence from 'src/persistence/entity-persistence';
