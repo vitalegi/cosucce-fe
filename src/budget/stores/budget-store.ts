@@ -46,6 +46,7 @@ export const useBudgetStore = defineStore('budget', {
     accountsAsList: (state) => Array.from(state.accounts.values()),
     findAccountById: (state) => (accountId: string) => state.accounts.get(accountId),
     findCategoryById: (state) => (categoryId: string) => state.categories.get(categoryId),
+    findEntryById: (state) => (entryId: string) => state.entries.find((e) => e.entryId === entryId),
     filterEntries: (state) => {
       return (filters: BoardEntryFilter): BoardEntry[] =>
         state.entries.filter((e) => boardEntryFilter(e, filters));
