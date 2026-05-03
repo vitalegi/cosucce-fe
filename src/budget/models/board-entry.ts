@@ -1,3 +1,4 @@
+import { parse } from 'date-fns';
 import bigDecimal from 'js-big-decimal';
 import { SafeBigDecimal } from 'src/utils/numbers/safe-big-decimal';
 import ObjectUtil from 'src/utils/object-util';
@@ -6,6 +7,7 @@ export default class BoardEntry {
   entryId = '';
   boardId = '';
   date = '';
+  dateValue!: Date;
   accountId = '';
   categoryId = '';
   description = '';
@@ -23,6 +25,7 @@ export default class BoardEntry {
     out.entryId = ObjectUtil.propAsString(obj, 'entryId');
     out.boardId = ObjectUtil.propAsString(obj, 'boardId');
     out.date = ObjectUtil.propAsString(obj, 'date');
+    out.dateValue = parse(out.date, 'yyyy-MM-dd', new Date());
     out.accountId = ObjectUtil.propAsString(obj, 'accountId');
     out.categoryId = ObjectUtil.propAsString(obj, 'categoryId');
     out.description = ObjectUtil.propAsString(obj, 'description');

@@ -19,6 +19,8 @@ import { DeleteBoardAccount } from 'src/persistence/impl/board-account-persisten
 import { AddBoardCategory } from 'src/persistence/impl/board-category-persistence-add';
 import { UpdateBoardCategory } from 'src/persistence/impl/board-category-persistence-update';
 import { DeleteBoardCategory } from 'src/persistence/impl/board-category-persistence-delete';
+import { parse } from 'date-fns';
+import { useBudgetTimeIntervalStore } from 'src/budget/time-interval/stores/budget-time-interval-store';
 
 type BoardEntryFilter = {
   categoryId?: string;
@@ -47,16 +49,25 @@ export const useBudgetStore = defineStore('budget', {
     findAccountById: (state) => (accountId: string) => state.accounts.get(accountId),
     findCategoryById: (state) => (categoryId: string) => state.categories.get(categoryId),
     findEntryById: (state) => (entryId: string) => state.entries.find((e) => e.entryId === entryId),
-    filterEntries: (state) => {
-      return (filters: BoardEntryFilter): BoardEntry[] =>
-        state.entries.filter((e) => boardEntryFilter(e, filters));
+    entriesInTimeInterval(state) {
+      const timeInterval = useBudgetTimeIntervalStore();
+      const from = timeInterval.from;
+      const to = timeInterval.to;
+      return state.entries.filter((e) => {
+        const date = parse(e.date, 'yyyy-MM-dd', new Date());
+        return from <= date && date <= to;
+      });
     },
-    categorySize: (state) => {
+    filterEntries() {
+      return (filters: BoardEntryFilter): BoardEntry[] =>
+        this.entriesInTimeInterval.filter((e) => boardEntryFilter(e, filters));
+    },
+    categorySize() {
       return (categoryId: string): number => {
-        return state.entries.filter((e) => e.categoryId === categoryId).length;
+        return this.entriesInTimeInterval.filter((e) => e.categoryId === categoryId).length;
       };
     },
-    categoryAmount: (state) => {
+    categoryAmount(state) {
       return (categoryId: string): SafeBigDecimal => {
         const category = state.categories.get(categoryId);
         let sign: SafeBigDecimal = BigDecimalUtil.PLUS_ONE;
@@ -64,12 +75,14 @@ export const useBudgetStore = defineStore('budget', {
           sign = BigDecimalUtil.MINUS_ONE;
         }
         const amount = BigDecimalUtil.sum(
-          state.entries.filter((e) => e.categoryId === categoryId).map((e) => e.amount),
+          this.entriesInTimeInterval
+            .filter((e) => e.categoryId === categoryId)
+            .map((e) => e.amount),
         );
         return amount.multiply(sign);
       };
     },
-    amount: (state) => {
+    amount(state) {
       return (boardEntry: BoardEntry): SafeBigDecimal => {
         const category = state.categories.get(boardEntry.categoryId);
         let sign: SafeBigDecimal = BigDecimalUtil.PLUS_ONE;
