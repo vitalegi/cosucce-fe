@@ -18,14 +18,14 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered v-if="mainLayoutStore.isBudgetView">
+    <q-drawer v-model="leftDrawerOpen" overlay bordered v-if="mainLayoutStore.isBudgetView">
       <div class="row items-start justify-start q-px-md">
         <div class="col-12 q-gutter-sm">
           <TimeIntervalSelector></TimeIntervalSelector>
         </div>
       </div>
     </q-drawer>
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered v-if="!mainLayoutStore.isBudgetView">
+    <q-drawer v-model="leftDrawerOpen" overlay bordered v-if="!mainLayoutStore.isBudgetView">
       <q-list>
         <q-item-label header> Essential Links </q-item-label>
 
