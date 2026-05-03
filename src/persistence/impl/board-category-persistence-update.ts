@@ -58,7 +58,7 @@ export class BoardCategoryUpdatePersistence implements EntityLocalPersistence {
         `New ETag of changelog ${changelog.changelogId} is undefined (${changelog.action}, ${changelog.entityType}, ${changelog.entityId})`,
       );
     }
-    backendService.boardCategoryResource().update({
+    await backendService.boardCategoryResource().update({
       categoryId: e.categoryId,
       boardId: e.boardId,
       label: e.label,

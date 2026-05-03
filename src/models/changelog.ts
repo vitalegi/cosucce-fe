@@ -7,7 +7,8 @@ export type ChangelogStatus =
   | 'generic-error'
   | 'unauthorized'
   | 'forbidden'
-  | 'conflict';
+  | 'conflict'
+  | 'server-unavailable';
 
 export type EntityType = 'board' | 'board-entry' | 'board-account' | 'board-category';
 

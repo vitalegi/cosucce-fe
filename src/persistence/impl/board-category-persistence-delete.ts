@@ -37,7 +37,7 @@ export class BoardCategoryDeletePersistence implements EntityLocalPersistence {
   }
   async executeRemote(changelog: Changelog, allowSSORedirect: boolean): Promise<void> {
     const e = changelog.payload as BoardCategoryDto;
-    backendService
+    await backendService
       .boardCategoryResource()
       .delete({ categoryId: e.categoryId, boardId: e.boardId, allowSSORedirect: allowSSORedirect });
   }

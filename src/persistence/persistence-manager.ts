@@ -109,6 +109,9 @@ export class PersistenceManager {
       if (code === 'unauthorized') {
         return;
       }
+      if (code === 'server-unavailable') {
+        return;
+      }
       throw e;
     }
   }
@@ -125,6 +128,10 @@ export class PersistenceManager {
         const result = await this.pushChangelog(c);
         if (result === 'unauthorized') {
           console.log('Unauthorized, stop sync');
+          return;
+        }
+        if (result === 'server-unavailable') {
+          console.log('Server unavailable, stop sync');
           return;
         }
       }
@@ -159,7 +166,7 @@ export class PersistenceManager {
       return 'done';
     } catch (e) {
       const code = this.getErrorCode(e);
-      if (code !== 'unauthorized') {
+      if (code !== 'unauthorized' && code !== 'server-unavailable') {
         console.error(`Error while pushing to remote: ${Changelog.toString(changelog)}`, e);
       }
       await localDb.changelogs.update(changelog.changelogId, {
@@ -233,6 +240,8 @@ export class PersistenceManager {
         return 'forbidden';
       case 409:
         return 'conflict';
+      case 502:
+        return 'server-unavailable';
       default:
         return 'generic-error';
     }

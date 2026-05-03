@@ -44,7 +44,7 @@ export class BoardEntryAddPersistence implements EntityLocalPersistence {
         `New ETag of changelog ${changelog.changelogId} is undefined (${changelog.action}, ${changelog.entityType}, ${changelog.entityId})`,
       );
     }
-    backendService.boardEntryResource().add({
+    await backendService.boardEntryResource().add({
       boardId: e.boardId,
       entryId: e.entryId,
       date: e.date,

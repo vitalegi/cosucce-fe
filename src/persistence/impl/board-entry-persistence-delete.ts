@@ -37,6 +37,6 @@ export class BoardEntryDeletePersistence implements EntityLocalPersistence {
   }
   async executeRemote(changelog: Changelog, allowSSORedirect: boolean): Promise<void> {
     const e = changelog.payload as BoardEntryDto;
-    backendService.boardEntryResource().delete(e.boardId, e.entryId, allowSSORedirect);
+    await backendService.boardEntryResource().delete(e.boardId, e.entryId, allowSSORedirect);
   }
 }
