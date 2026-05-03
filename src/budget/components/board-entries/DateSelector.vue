@@ -7,7 +7,7 @@
     hide-bottom-space
     :rules="[(val) => (val && val.trim().length !== 0) || 'Campo obbligatorio']"
   >
-    <template v-slot:append>
+    <template v-slot:prepend>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
           <q-date v-model="model" first-day-of-week="1" :mask="mask">

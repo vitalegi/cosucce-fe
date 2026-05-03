@@ -92,7 +92,7 @@ export class PersistenceManager {
         const lastRemoteSyncDate = new Date(Date.parse(lastRemoteSync));
         const ref = new Date();
         const diff = date.getDateDiff(ref, lastRemoteSyncDate, 'minutes');
-        if (diff < 5) {
+        if (diff < 1) {
           return;
         }
       }

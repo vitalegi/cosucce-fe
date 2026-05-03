@@ -10,8 +10,8 @@
       :categoryId="element?.categoryId || ''"
       :description="element?.description || ''"
       :amount="element?.amount || new bigDecimal('0')"
-      :creationDate="element?.creationDate || new Date()"
-      @save="save"
+      @save="goToBoard"
+      @delete="goToBoard"
     />
   </q-page>
 </template>
@@ -43,7 +43,7 @@ const categoryType = computed(() => {
   return category?.type || 'CREDIT';
 });
 
-async function save(): Promise<void> {
+async function goToBoard(): Promise<void> {
   await routing.budget().viewBoard(router, boardId.value);
 }
 

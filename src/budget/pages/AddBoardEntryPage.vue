@@ -9,8 +9,8 @@
       categoryId=""
       description=""
       :amount="new bigDecimal('0')"
-      :creationDate="new Date()"
-      @save="save"
+      @save="goToBoard"
+      @delete="goToBoard"
     ></BoardEntryEditor>
   </q-page>
 </template>
@@ -28,7 +28,7 @@ import BoardCategoryType from 'src/budget/models/board-category-type';
 const route = useRoute();
 const router = useRouter();
 
-async function save(): Promise<void> {
+async function goToBoard(): Promise<void> {
   await routing.budget().viewBoard(router, boardId.value);
 }
 const boardId = ref<string>(toBoardId(route.params));

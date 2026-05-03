@@ -1,4 +1,5 @@
 <template>
+  <DeleteButton v-if="!addMode" @delete="deleteEntry" />
   <q-form class="col-12 q-gutter-y-md" style="max-width: 600px" greedy @submit="submit()">
     <DateSelector outlined v-model="editor.date" :mask="DateUtil.Q_DATE_MASK" label="Date" />
     <BoardAccountSelector :board-id="boardId" label="Account" v-model="editor.accountId" />
@@ -25,8 +26,9 @@ import AmountSelector from 'src/budget/components/board-entries/AmountSelector.v
 import { SafeBigDecimal } from 'src/utils/numbers/safe-big-decimal';
 import NumberUtil from 'src/utils/numbers/number-util';
 import BoardCategoryType from 'src/budget/models/board-category-type';
+import DeleteButton from 'src/budget/components/commons/DeleteButton.vue';
 
-const emit = defineEmits(['save']);
+const emit = defineEmits(['save', 'delete']);
 
 interface Props {
   id?: string;
@@ -100,6 +102,14 @@ async function submit(): Promise<void> {
       id: props.id,
     });
   }
+}
+
+async function deleteEntry(): Promise<void> {
+  if (props.id === undefined) {
+    throw Error('id is undefined, code should be unreachable');
+  }
+  await budgetStore.deleteBoardEntry({ boardId: props.boardId, entryId: props.id });
+  emit('delete');
 }
 
 function refreshData() {
