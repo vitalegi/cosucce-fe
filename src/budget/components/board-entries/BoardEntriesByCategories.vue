@@ -40,3 +40,8 @@ const categoriesSortedByAmount = computed(() => {
     .sort((a, b) => -a.amount.compareTo(b.amount));
 });
 </script>
+<style scoped lang="scss">
+.q-list {
+  width: 100%;
+}
+</style>
