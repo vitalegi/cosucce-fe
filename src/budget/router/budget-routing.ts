@@ -41,6 +41,9 @@ export class BudgetPaths {
   public static settingsEditCategory(boardId: string, categoryId: string): string {
     return `/budget/board/${boardId}/settings/category/${categoryId}`;
   }
+  public static settingsBudgetAdmin(boardId: string): string {
+    return `/budget/board/${boardId}/settings/admin`;
+  }
 }
 
 export class BudgetRouting {
@@ -104,5 +107,11 @@ export class BudgetRouting {
     categoryId: string,
   ): Promise<NavigationFailure | void | undefined> {
     return push(router, BudgetPaths.settingsEditCategory(boardId, categoryId));
+  }
+  public settingsBudgetAdmin(
+    router: Router,
+    boardId: string,
+  ): Promise<NavigationFailure | void | undefined> {
+    return push(router, BudgetPaths.settingsBudgetAdmin(boardId));
   }
 }

@@ -48,6 +48,9 @@
           <q-item clickable v-ripple>
             <q-item-section @click="settingsCategories()"> Categories </q-item-section>
           </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section @click="settingsBudgetAdmin()"> Admin </q-item-section>
+          </q-item>
         </q-list>
       </div>
     </q-drawer>
@@ -132,6 +135,9 @@ function settingsAccounts(): Promise<unknown> {
 }
 function settingsCategories(): Promise<unknown> {
   return routing.budget().settingsViewCategories(router, mainLayoutStore.boardId);
+}
+function settingsBudgetAdmin(): Promise<unknown> {
+  return routing.budget().settingsBudgetAdmin(router, mainLayoutStore.boardId);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

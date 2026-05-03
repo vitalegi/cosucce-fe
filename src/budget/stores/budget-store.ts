@@ -47,7 +47,27 @@ export const useBudgetStore = defineStore('budget', {
     categoriesAsList: (state) => Array.from(state.categories.values()),
     accountsAsList: (state) => Array.from(state.accounts.values()),
     findAccountById: (state) => (accountId: string) => state.accounts.get(accountId),
+    findAccountByLabel() {
+      const accounts = this.accountsAsList;
+      return (label: string): BoardAccount | undefined => {
+        const match = accounts.filter((e) => e.label === label);
+        if (match.length === 0) {
+          return undefined;
+        }
+        return match[0];
+      };
+    },
     findCategoryById: (state) => (categoryId: string) => state.categories.get(categoryId),
+    findCategoryByLabel() {
+      const categories = this.categoriesAsList;
+      return (label: string): BoardCategory | undefined => {
+        const match = categories.filter((e) => e.label === label);
+        if (match.length === 0) {
+          return undefined;
+        }
+        return match[0];
+      };
+    },
     findEntryById: (state) => (entryId: string) => state.entries.find((e) => e.entryId === entryId),
     entriesInTimeInterval(state) {
       const timeInterval = useBudgetTimeIntervalStore();

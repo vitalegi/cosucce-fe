@@ -188,6 +188,21 @@ const routes: RouteRecordRaw[] = [
               },
             },
           },
+          {
+            path: 'admin',
+            component: () => import('/src/budget/pages/BoardAdminPage.vue'),
+            meta: {
+              breadcrumbs: (route: RouteLocationNormalized) => {
+                const boardId = castParamToString(route.params.boardId);
+                return [
+                  home(),
+                  BudgetBreadcrumbs.viewBoards(),
+                  BudgetBreadcrumbs.viewBoard(boardId),
+                  BudgetBreadcrumbs.settingsBudgetAdmin(boardId, false),
+                ];
+              },
+            },
+          },
         ],
       },
     ],

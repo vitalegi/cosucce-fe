@@ -5,7 +5,7 @@
     :icon="icon"
     :color="color"
     :disable="!enabled"
-    size="xl"
+    :size="size"
     class="full-width"
   />
 </template>
@@ -14,7 +14,10 @@ interface Props {
   icon: string;
   color: string;
   enabled: boolean;
+  size?: string;
 }
 
-defineProps<Props>();
+withDefaults(defineProps<Props>(), {
+  size: 'xl',
+});
 </script>

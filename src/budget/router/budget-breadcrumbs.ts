@@ -71,4 +71,10 @@ export class BudgetBreadcrumbs {
       to: link ? BudgetPaths.settingsEditCategory(boardId, categoryId) : undefined,
     };
   }
+  public static settingsBudgetAdmin(boardId: string, link: boolean = true): Breadcrumb {
+    return {
+      label: 'Admin',
+      to: link ? BudgetPaths.settingsBudgetAdmin(boardId) : undefined,
+    };
+  }
 }
